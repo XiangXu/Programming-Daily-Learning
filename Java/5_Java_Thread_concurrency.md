@@ -322,3 +322,7 @@ In general, mutual exclusion is important only when multiple threads are sharing
 **Cooperation is important when one thread needs some data to be in a particular state and another thread is responsible for getting the data into that state e.g. producer/consumer problem** where read thread needs the buffer to be in a “not empty” state before it can read any data out of the buffer. If the read thread discovers that the buffer is empty, it must wait. The write thread is responsible for filling the buffer with data. Once the write thread has done some more writing, the read thread can do some more reading. It is also sometimes called a “Wait and Notify” OR “Signal and Continue” monitor because it retains ownership of the monitor and continues executing the monitor region (the continue) if needed. At some later time, the notifying thread releases the monitor and a waiting thread is resurrected to own the lock.
 
 **Thiscooperation requires both i.e. entry-set and wait-set** . Below given diagram will help you in understand this cooperation.
+
+Reference:
+
+https://howtodoinjava.com/java/multi-threading/what-is-thread-safety/
