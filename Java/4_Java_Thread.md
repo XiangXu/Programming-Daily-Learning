@@ -366,5 +366,3 @@ https://www.guru99.com/multithreading-java.html
 https://www.jianshu.com/p/a3f9f2c3ecf8
 
 https://www.tutorialspoint.com/java/java_multithreading.htm
-
-https://howtodoinjava.com/java-concurrency-tutorial/
