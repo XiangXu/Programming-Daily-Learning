@@ -229,6 +229,7 @@ Some of the commonly used methods for threads are
 |  Method |  Description  |
 |---|---|
 | public void start()  | This method starts the execution of the thread and JVM calls the run method on the thread   |
+| public void wait() | This method causes current thread to wait until another thread invokes the notify() method or the notifyAll() method for this object. |
 | public void run()  | If this Thread object was instantiated using a seperate Runnable target, the run() method is invoked on the Runnable object |
 | public final void setName(String name) | Changes the name of the Thread object. There is also a getName() method for retriving the name |
 | public final void setPriority(int priority) | Sets the priority of this Thread object. The possible values are between 1 - 10 |
