@@ -60,42 +60,279 @@ Advantages of multithread:
 2. As such the threads are independent, the other threads won't get effected if one thread meets a exception.
 
 
-### Create Threads
+### Create Threads by Implementing a Runnable Interface
 
-There are two ways of creating threads: implementing an interface and extending a class.
+If your class is intended to be executed as a thread then you can achieve this by implementing a **Runnable** interface. You will need to follow three basic steps:
 
-There are a few differences between a class and an interface:
-
-First, an interface can only contain abstract methods(Java 8 allows to implment default method in interface) and/or static final variables(constants). Classes, on the other hand , can implement methods and contain variables that are not constatns. 
-
-Second, an interface cannot implement any methods. A class that implements an interface must implement all methods defined in that interface. An interface has the ability to extend from other interfaces, and unlike classes can extend from multiple interfaces.
-
-Furthermore, an interface cannot be instantiated with new operator.
-
-Here are two exmaples:
+1. You need to implement a run() method provied by **Runnable** interface. This method provides an entry point for the thread and you will put your complete business logic inside this method. 
 ```java
-import java.lang.*;
-class Counter extends Thread 
-{                      
-        public void run()                       
-        {              
-            ....            
+public void run( )
+```
+
+2. You will instantiate a **Thread** object using the following constructor - 
+```java
+Thread(Runnable threadObj, String threadName);
+```
+Where, threadObj is an instance of a class that implements the **Runnable** interface and **threadName** is the name given to the new thread.
+
+3. Once a Thread object is created, you can start it by calling **start()** method, which executes a call to run() method.
+```java
+void start();
+```
+
+Here is an exmaple:
+```java
+package fundamental.threadstudy;
+
+class TestRunnable implements Runnable
+{
+    private Thread t;
+    private String threadName;
+
+    TestRunnable(String threadName)
+    {
+        this.threadName = threadName;
+        System.out.println("Creating thread " + threadName);
+    }
+
+    @Override
+    public void run()
+    {
+        System.out.println("Running thread " + threadName);
+        try
+        {
+            for(int i = 4; i > 0; i--)
+            {
+                System.out.println("Thread: " + threadName + ", " + i);
+                // Let the thread sleep for a while.
+                Thread.sleep(50);
+            }
         }
+        catch (InterruptedException e)
+        {
+            System.out.println("Thread " + threadName + " interrupted");
+        }
+
+        System.out.println("Thread " +  threadName + " exiting.");
+    }
+
+    public void start()
+    {
+        System.out.println("Starting thread " + threadName);
+        if(t == null)
+        {
+            t = new Thread(this, threadName);
+            t.start();
+        }
+    }
 }
 
-class Counter implements Runnable
+public class RunnableDemo
 {
-    @Override
-    public void run() 
+    public static void main(String[] args) {
+        TestRunnable R1 = new TestRunnable("Thread-1");
+        R1.start();
+
+         TestRunnable R2 = new TestRunnable("Thread-2");
+        R2.start();
+    }
+
+}
+
+/**
+Creating thread Thread-1
+Starting thread Thread-1
+Creating thread Thread-2
+Running thread Thread-1
+Starting thread Thread-2
+Running thread Thread-2
+Thread: Thread-1, 4
+Thread: Thread-2, 4
+Thread: Thread-2, 3
+Thread: Thread-1, 3
+Thread: Thread-1, 2
+Thread: Thread-2, 2
+Thread: Thread-1, 1
+Thread: Thread-2, 1
+Thread Thread-1 exiting.
+Thread Thread-2 exiting.
+/**
+```
+
+### Create Threads by extending a Thread Class
+
+The second way to create a thread is to create a new class that extends **Thread** class using following simple steps.
+
+1. you need to override **run()** method available in Thread class. This method provides an entry point for the thread and you will put your complete business logic inside this method. 
+```java
+public void run( )
+```
+
+2. Once Thread object is created, you can start it by calling **start()** method, which executes a call to run( ) method.
+```java
+void start();
+```
+
+Here is an exmaple:
+```java
+package fundamental.threadstudy;
+
+class TestThread extends Thread
+{
+    private Thread t;
+    private String threadName;
+
+    TestThread(String threadName)
     {
-        ...
+        this.threadName = threadName;
+        System.out.println("Creating thread " + threadName);
+    }
+
+    @Override
+    public void run()
+    {
+        try {
+            for(int i = 4; i > 0; i--) {
+                System.out.println("Thread: " + threadName + ", " + i);
+                // Let the thread sleep for a while.
+                Thread.sleep(50);
+            }
+        } catch (InterruptedException e) {
+            System.out.println("Thread " +  threadName + " interrupted.");
+        }
+        System.out.println("Thread " +  threadName + " exiting.");
+    }
+
+    public void start () {
+        System.out.println("Starting " +  threadName );
+        if (t == null) {
+            t = new Thread (this, threadName);
+            t.start ();
+        }
+    }
+}
+
+public class ThreadDemo
+{
+    public static void main(String[] args) {
+        TestThread R1 = new TestThread("Thread-1");
+        R1.start();
+
+        TestThread R2 = new TestThread("Thread-2");
+        R2.start();
     }
 }
 ```
 
-The first method of creating a thread is to simply extend from the **Thread** class. Do this only if the class you need executed as a thread does not ever need to be extended from another class. The **Thread** class is defined in the package java.lang, which needs to be imported so that our classes are aware of its definition.
+Some of the commonly used methods for threads are
 
-The second method is defined in the Runnable interface and is being implemented. Note that we have an instance of the **Thread** class as a variable of the **Counter** class. The only difference between the two methods is that by implementing Runnable, there is greater flexibility in the creation of the class **Counter**. 
+|  Method |  Description  |
+|---|---|
+| public void start()  | This method starts the execution of the thread and JVM calls the run method on the thread   |
+| public void run()  | If this Thread object was instantiated using a seperate Runnable target, the run() method is invoked on the Runnable object |
+| public final void setName(String name) | Changes the name of the Thread object. There is also a getName() method for retriving the name |
+| public final void setPriority(int priority) | Sets the priority of this Thread object. The possible values are between 1 - 10 |
+| public final void setDaemon(boolean on) | A parameter of true denotes this thread as a daemon Thread |
+| public final void join(long millisec) | The current thread invokes this method on a second thread, causing current thread to block until the second thread termiantes or the specific number of milliseconds passes |
+| public void interrupt() | Interrupts this thread, causing it to continue execution if it was blocked for any reason |
+| public final boolean isAlive() | Returns true if the thread is alive, which is any time after the thread has been started before it runs to completion |
+
+The previous methods are invoked on a particular Thread object. The following methods in the Thread class are static. Invoking one of the static methods performs the operation on the currently running thread.
+
+|  Method |  Description  |
+|---|---|
+| public void yield()  | Causing the currently running thread to yield to any other threads of the same priority that are waiting to be scheduled |
+| public static void sleep(long millisec) | Causes the currently running thread to block for at least the specified number of milliseconds |
+| public static boolean holdsLock(Object x) | Returns true if the current thread holds the lock on the given Object |
+| public static Thread currentThread() | Returns a reference to the currently running thread, which is the thread that invokes this method |
+| public static void dumpStack() | Prints the stack trace for the currently running thread, which is useful when debugging a multithreaded application. |
+
+Here is an example
+```java
+package fundamental.threadstudy;
+
+class DisplayMessage implements Runnable
+{
+    private String message;
+
+    DisplayMessage(String message)
+    {
+        this.message = message;
+    }
+
+    @Override
+    public void run()
+    {
+        while(true) {
+            System.out.println(message);
+        }
+    }
+}
+
+class GuessANumber extends Thread
+{
+    private int number;
+
+    public GuessANumber(int number)
+    {
+        this.number = number;
+    }
+
+    @Override
+    public void run()
+    {
+        int counter = 0;
+        int guess = 0;
+        do {
+            guess = (int) (Math.random() * 100 + 1);
+            System.out.println(this.getName() + " guesses " + guess);
+            counter++;
+        }
+        while(guess != number);
+
+        System.out.println("** Correct!" + this.getName() + "in" + counter + "guesses.**");
+    }
+}
+
+public class ThreadMethodsTest
+{
+    public static void main(String[] args)
+    {
+        Runnable hello = new DisplayMessage("Hello");
+        Thread thread1 = new Thread(hello);
+        thread1.setDaemon(true);
+        thread1.setName("Hello");
+        System.out.println("Starting hello thread...");
+        thread1.start();
+
+        Runnable bye = new DisplayMessage("Goodbye");
+        Thread thread2 = new Thread(bye);
+        thread2.setPriority(Thread.MIN_PRIORITY);
+        thread2.setDaemon(true);
+        System.out.println("Starting goodbye thread...");
+        thread2.start();
+
+        System.out.println("Starting thread3...");
+        Thread thread3 = new GuessANumber(27);
+        thread3.start();
+
+        try {
+            thread3.join();
+        } catch (InterruptedException e) {
+            System.out.println("Thread interrupted.");
+        }
+        System.out.println("Starting thread4...");
+        Thread thread4 = new GuessANumber(75);
+
+        thread4.start();
+        System.out.println("main() is ending...");
+    }
+}
+```
+
+
+
+
 
 ### Thread Life Cycle in Java
 
@@ -105,44 +342,20 @@ The second method is defined in the Runnable interface and is being implemented.
 
 3. **Running**: When the thread starts executing, then the state is changed to "running" state. The scheduler selects on thread from the thread pool, and it starts executing in the applicaiton.
 
-4. **Waiting**: This is the state when a thread has to wait. As there multiple threads are running in the application, there is a need for synchronization(同时发生的) between threads. Hence, one thread has to wait,till other thread gets executed. Therefore, this state is referred as waiting state.
+4. **Blocked/Waiting**: This is the state when a thread has to wait. As there multiple threads are running in the application, there is a need for synchronization(同时发生的) between threads. Hence, one thread has to wait,till other thread gets executed. Therefore, this state is referred as waiting state.
 
-5. **Dead**: This is the state when the thread is terminated. The thread is in running state and as soon as it completed processing it is in "dead state".
+5. **Timed Waiting**: A runnable thread can enter the timed waiting state for a specific interval of time. A thread in this state transitions back to the runnable state when that time interval expires or when the event it is waiting for occurs.
 
-Some of the commonly used methods for threads are
+6. **Terminated/Dead**: This is the state when the thread is terminated. The thread is in running state and as soon as it completed processing it is in "dead state".
 
-|  Method |  Description  |
-|---|---|
-| start()  | This method starts the execution of the thread and JVM calls the run method on the thread   |
-| Sleep(int milliseconds)  | This method makes the thread sleep hence the thread's execution will pause for milliseconds provided and after that, again the thread starts executing. This help in synchronization of the threads.   |
-| getName()  | It returns the name of the thread.   |
-| setPriority(int newPriority)  | It changes the priority of the thread   |
-| yield() | It causes current thread on halt and other threads to execute |
-```java
-package demotest;
-public class thread_example1 implements Runnable {
-    @Override
-    public void run() {
-    }
-    public static void main(String[] args) {
-        Thread guruthread1 = new Thread();
-        guruthread1.start();
-        try {
-            guruthread1.sleep(1000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        guruthread1.setPriority(1);
-        int gurupriority = guruthread1.getPriority();
-        System.out.println(gurupriority);
-        System.out.println("Thread Running");
-  }
-}
-// Output:
-//5
-//Thread Running
-```
+
+### Thread Priorities
+
+Every Java thread has priority that helps operation system determine the order in which threads are scheduled.
+
+Java thread priorities are in range between MIN-PRIORITY (a constant of 1) and MAX_PRIORITY (a constant of 10). By default, every thread is given priority NORMAL_PRIORITY(a constant of 5).
+
+Threads with higher priority are more important to a program and should be allocated processor time before lower-priority threads. However, thread priorities cannot guarantee the order in which threads execute and are very much platform dependent.
 
 ### Java Thread Synchronization
 
@@ -165,90 +378,7 @@ Synchronized(object)
 ```
 
 
-## Java Multithreading Example
 
-In this example, it shows how to override run() and start() method of a runnable interface and create two threads of that class and run them accordingly.
-
-```java
-package fundamental;
-
-public class ThreadStudy
-{
-
-    public static void main(String[] args)
-    {
-        WorkerThread workerThread1 = new WorkerThread("worker1");
-        workerThread1.start();
-
-        WorkerThread workerThread2 = new WorkerThread("worker2");
-        workerThread2.start();
-    }
-}
-
-class WorkerThread implements Runnable
-{
-    private Thread worker;
-    private String workerName;
-
-    WorkerThread(String workerName)
-    {
-        this.workerName = workerName;
-    }
-
-    @Override
-    public void run()
-    {
-        System.out.println("Thread running " + workerName);
-        for(int i=0; i<4; i++)
-        {
-            System.out.println(i);
-            System.out.println(workerName);
-            try
-            {
-                Thread.sleep(1000);
-            }
-            catch (InterruptedException e)
-            {
-                System.out.println("Thread has been interrupted");
-            }
-        }
-    }
-
-    public void start()
-    {
-        System.out.println("Thread started");
-        if(worker == null)
-        {
-            worker = new Thread(this,  workerName);
-            worker.start();;
-        }
-    }
-}
-
-/**
-Outputs:
-Thread started
-Thread started
-Thread running worker1
-Thread running worker2
-0
-worker2
-0
-worker1
-1
-worker2
-1
-worker1
-2
-worker2
-2
-worker1
-3
-worker2
-3
-worker1
-**/
-```
 
 
 
@@ -265,3 +395,5 @@ https://www.javaworld.com/article/2077138/introduction-to-java-threads.html
 https://www.guru99.com/multithreading-java.html
 
 https://www.jianshu.com/p/a3f9f2c3ecf8
+
+https://www.tutorialspoint.com/java/java_multithreading.htm
