@@ -20,3 +20,8 @@
 
 **git push**: updates the remote repository with any commits made locally to a branch.
 
+Reference: 
+
+https://guides.github.com/introduction/git-handbook/
+
+http://luchenqun.com/%E6%9C%AA%E5%88%86%E7%B1%BB/git-tips/
