@@ -20,7 +20,7 @@
 
 ```
 
-2. When we create a String using double quotes, it fist looks for the String with same value in the JVM string pool, if found it returns the reference otherwise it creates the String object and then places it in the String pool. This way JVM saves a lot of spaces by using the same String in different threads. But if a new operator is used, it explicitly creates a new String in heap memory.
+2. When we create a String using double quotes, it first looks for the String with same value in the JVM string pool, if found it returns the reference otherwise it creates the String object and then places it in the String pool. This way JVM saves a lot of spaces by using the same String in different threads. But if a new operator is used, it explicitly creates a new String in heap memory.
 
 3. Operator + is overloaded for String and used to concatenate two String. Although internally it uses StringBuffer or StringBuilder to perform this action.
 

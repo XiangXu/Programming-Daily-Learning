@@ -98,7 +98,7 @@ public class Person
             return false;
 
         if(this.getClass() != o.getClass())
-            return true;
+            return false;
         
         Person p = (Person) o;
         return this.idNumber == o.idNumber;
