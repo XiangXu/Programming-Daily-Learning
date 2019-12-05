@@ -358,6 +358,31 @@ Java thread priorities are in range between MIN-PRIORITY (a constant of 1) and M
 Threads with higher priority are more important to a program and should be allocated processor time before lower-priority threads. However, thread priorities cannot guarantee the order in which threads execute and are very much platform dependent.
 
 
+### Optimistic(乐观的) and Pessimistic(悲观的) Locking
+
+Traditional locking mechanisms **using synchronized keyword in Java, is said to be pessimistic technique** of locking or multi-threading. It asks you to first guarantee that no other thread will interfere in between certain operation and then only allow you access to any instance/method.
+
+*It's much like saying "please close the door first; otheriwe some other crook will come in and rearrange your stuff."*
+
+Though above approach is safe and it does work, but it put a significant penalty on your application in terms of performance. Reason is simple that waiting threads can not do anything unless they also get a chance and perform the guarded operation.
+
+There exist one more approach which is more efficient in performance, and it optimistic in nature. In this approach, you proceed with an update, being hopeful that you can complete it without interference. This approach relies on collision detection to determine if there has been interference from other parties during the update, in which case the operation fails and can be retried (or not).
+
+*The optimistic approach is like the old saying, “It is easier to obtain forgiveness than permission”, where “easier” here means “more efficient”.*
+
+**Compare and Swap** is a good example of such optimistic approach.
+
+### Compare and Swap Algorithm
+
+This algorithm compares the contents of a memory location to a given value and, only if they are the same, modifies the content of that memory location to a given new value. 
+
+There are 3 parameters for a CSA operation:
+
+1. A memory location V where value has to be placed. 
+2. Old value A which was read by thread last time.
+3. New value B which should be written over V.
+
+
 Reference:
 
 https://www.javaworld.com/article/2077138/introduction-to-java-threads.html
@@ -366,4 +391,6 @@ https://www.guru99.com/multithreading-java.html
 
 https://www.jianshu.com/p/a3f9f2c3ecf8
 
-https://www.tutorialspoint.com/java/java_multithreading.htm
+https://www.tutorialspoint.com/java/java_multithreading.html
+
+https://howtodoinjava.com/java-concurrency-tutorial/
