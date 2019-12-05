@@ -383,6 +383,85 @@ There are 3 parameters for a CSA operation:
 3. New value B which should be written over V.
 
 
+### Java synchronized keyword
+
+**Java synchronized keyword** marks a block or method a critical section. A critical section is where one and only one thread is executing at a time, and the thread holds the lock for synchronized section.
+
+The **synchronized** keyword can be use with:
+
+1. a code block
+2. a method
+
+```java
+synchronized( lockObject ) 
+{
+   // synchronized statements
+}
+```
+
+When a thread wants to execute synchronized statements inside the synchronized block, it MUST acquire the lock on lockObject‘s monitor. At a time, only one thread can acquire the monitor of a lock object. So all other threads must wait till this thread, currently acquired the lock, finish it’s execution.
+
+In this way, synchronized keyword guarantees that only one thread will be executing the synchronized block statements at a time, and thus prevent multiple threads from corrupting the shared data inside the block.
+
+Keep in mind that if a thread is put on sleep (using sleep() method) then it does not release the lock. At this sleeping time, no thread will be executing the synchronized block statements.
+
+Java synchronization will throw NullPointerException if lock object used in 'synchronized (lock)' is null.
+
+Here are two examples:
+```java
+public class MathClass 
+{
+    void printNumbers(int n) throws InterruptedException 
+    {
+        synchronized (this) 
+        {
+            for (int i = 1; i <= n; i++) 
+            {
+                System.out.println(Thread.currentThread().getName() + " :: "+  i);
+                Thread.sleep(500);
+            }
+        }
+    }
+}
+
+public class MathClass 
+{
+    synchronized void printNumbers(int n) throws InterruptedException 
+    {
+        for (int i = 1; i <= n; i++) 
+        {
+            System.out.println(Thread.currentThread().getName() + " :: "+  i);
+            Thread.sleep(500);
+        }
+    }
+}
+
+public class Main 
+{
+    public static void main(String args[]) 
+    {
+        final MathClass mathClass = new MathClass();
+ 
+        //first thread
+        Runnable r = new Runnable() 
+        {
+            public void run() 
+            {
+                try {
+                    mathClass.printNumbers(3);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+       
+        new Thread(r, "ONE").start();
+        new Thread(r, "TWO").start();
+    }
+}
+```
+
+
 Reference:
 
 https://www.javaworld.com/article/2077138/introduction-to-java-threads.html
