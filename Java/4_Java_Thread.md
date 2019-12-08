@@ -399,7 +399,7 @@ synchronized( lockObject )
 }
 ```
 
-When a thread wants to execute synchronized statements inside the synchronized block, it MUST acquire the lock on lockObject‘s monitor. At a time, only one thread can acquire the monitor of a lock object. So all other threads must wait till this thread, currently acquired the lock, finish it’s execution.
+When a thread wants to execute synchronized statements inside the synchronized block,it MUST acquire the lock on lockObject‘s monitor. At a time, only one thread can acquire the monitor of a lock object. So all other threads must wait till this thread, currently acquired the lock, finish it’s execution.
 
 In this way, synchronized keyword guarantees that only one thread will be executing the synchronized block statements at a time, and thus prevent multiple threads from corrupting the shared data inside the block.
 
@@ -460,6 +460,130 @@ public class Main
     }
 }
 ```
+
+### Object level lock vs Class level lock
+
+#### Object level lock in Java
+
+**Object level lock** is mechanism when we want to synchronize a **non-static method** or **non-static code block** such that only one thread will be able to execute the code block on given instance of the class. This should always be done to make **instance level data thread safe**.
+```java
+public class DemoClass
+{
+    public synchronized void demoMethod(){}
+}
+ 
+or
+ 
+public class DemoClass
+{
+    public void demoMethod(){
+        synchronized (this)
+        {
+            //other thread safe code
+        }
+    }
+}
+ 
+or
+ 
+public class DemoClass
+{
+    private final Object lock = new Object();
+    public void demoMethod(){
+        synchronized (lock)
+        {
+            //other thread safe code
+        }
+    }
+}
+```
+#### Class level lock in Java
+
+**Class level lock** prevents miltiple threads to enter in *synchronized* block in any of all available instances of the class on running time. This means if in runtime there are 100 instances of *DemoClass*, then only one thread will be execute *demoMethod()* in any one of instance at a time, and all other instances will be locked for other threads. 
+
+Class level lokcing should always be done **to make static data field safe**. As we know that **static** keyword associate data of method to class level, so use locking at static fields or methods to make it on class level.
+```java
+public class DemoClass
+{
+    //Method is static
+    public synchronized static void demoMethod(){
+ 
+    }
+}
+ 
+or
+ 
+public class DemoClass
+{
+    public void demoMethod()
+    {
+        //Acquire lock on .class reference
+        synchronized (DemoClass.class)
+        {
+            //other thread safe code
+        }
+    }
+}
+ 
+or
+ 
+public class DemoClass
+{
+    private final static Object lock = new Object();
+ 
+    public void demoMethod()
+    {
+        //Lock object is static
+        synchronized (lock)
+        {
+            //other thread safe code
+        }
+    }
+}
+```
+
+1. According to the Java language specification you can not use synchronized keyword with constructor. It is illegal and result in compilation error.
+
+2. Do not synchronize on non final field on synchronized block in Java. Because reference of non final field may change any time and then different thread might synchronizing on different objects i.e. no synchronization at all.
+
+3. Do not use String literals because they might be referenced else where in the application and can cause deadlock. String objects created with new keyword can be used safely. But as a best practice, create a new private scoped Object instance OR lock on the shared variable itself which we want to protect. 
+
+
+#### wait(), notify() and notifyAll() 
+
+##### wait()
+
+It tells the calling method to give up the lock and go to sleep until some other thread enters the same monitor and calls *notify()*. The *wait()* method releases the lock prior to waiting and reacquires the lock prior to returning from the *wait()* method. The *wait()* method is actually tightly integrated with the synchronization lock, using the feature not available directly from the synchronization mechanism.
+```java
+synchronized( lockObject )
+{ 
+    while( ! condition )
+    { 
+        lockObject.wait();
+    }
+     
+    //take the action here;
+}
+```
+
+##### notify() and notifyAll()
+
+It wakes up one single thread that called *wait()* on the same object. It should be noted that calling *notify()* does not actually give up a lock on a resource. It tells a waiting thread that thread can wake up. However, the lock is not actually given up until the modifier's synchronised block has completed.
+```java
+synchronized( lockObject )
+{ 
+   //establish_the_condition;
+ 
+    lockObject.notify();
+     
+    //any additional code if needed
+}
+```
+
+**notifyAll()** wakes up all the threads that called **wait()** on the same object. The hightest priority thread will run first in most of situation, though not guaranteed.
+
+
+
 
 
 Reference:
