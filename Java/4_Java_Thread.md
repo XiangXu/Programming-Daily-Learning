@@ -551,7 +551,7 @@ public class DemoClass
 
 #### wait(), notify() and notifyAll() 
 
-##### wait()
+    ##### wait()
 
 It tells the calling method to give up the lock and go to sleep until some other thread enters the same monitor and calls *notify()*. The *wait()* method releases the lock prior to waiting and reacquires the lock prior to returning from the *wait()* method. The *wait()* method is actually tightly integrated with the synchronization lock, using the feature not available directly from the synchronization mechanism.
 ```java
@@ -581,6 +581,136 @@ synchronized( lockObject )
 ```
 
 **notifyAll()** wakes up all the threads that called **wait()** on the same object. The hightest priority thread will run first in most of situation, though not guaranteed.
+
+
+#### Difference between yield() and join()
+
+##### yield()
+
+   1. yield is a static method and native too.
+   2. yield tells the currently executing thread to give a chance to the threads that have equal priority in the Thread Poo..
+   3. There is no guarantee that yield will make currently executing thread to runnable state immediately.
+   4. It can only make a thread from Running State to Runnable State, not wait or blocked state.
+
+```java
+package fundamental.threadstudy;
+
+class Producer extends Thread
+{
+    @Override
+    public void run()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            System.out.println("I am Producer : Produced Item " + i);
+            Thread.yield();
+        }
+    }
+}
+
+class Consumer extends Thread
+{
+    public void run()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            System.out.println("I am Consumer : Consumed Item " + i);
+            Thread.yield();
+        }
+    }
+}
+
+public class YieldExample
+{
+    public static void main(String[] args)
+    {
+        Thread producer = new Producer();
+        Thread consumer = new Consumer();
+
+        producer.setPriority(Thread.MIN_PRIORITY); //Min Priority
+        consumer.setPriority(Thread.MAX_PRIORITY); //Max Priority
+
+        producer.start();
+        consumer.start();
+    }
+}
+/**
+I am Producer : Produced Item 0
+I am Consumer : Consumed Item 0
+I am Producer : Produced Item 1
+I am Consumer : Consumed Item 1
+I am Producer : Produced Item 2
+I am Consumer : Consumed Item 2
+I am Producer : Produced Item 3
+I am Consumer : Consumed Item 3
+I am Producer : Produced Item 4
+I am Consumer : Consumed Item 4
+**/
+```
+
+##### join()
+
+The join() method of a thread instance can be **used to "join" the start of a thread's execution to the end of another thread's execution** so that a thread will not start running until another thread has ended. 
+
+**Giving a timeout within join(), will make the join() effect to be nullified after the specific timeout.**
+
+```java
+package fundamental.threadstudy;
+
+public class JoinExample
+{
+    public static void main(String[] args) throws InterruptedException {
+        Thread t = new Thread(new Runnable()
+        {
+            public void run()
+            {
+                System.out.println("First task started");
+                System.out.println("Sleeping for 2 seconds");
+                try
+                {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
+                System.out.println("First task completed");
+            }
+        });
+        Thread t1 = new Thread(new Runnable()
+        {
+            public void run()
+            {
+                System.out.println("Second task completed");
+            }
+        });
+        t.start(); // Line 15
+        t.join(); // Line 16
+        t1.start();
+    }
+}
+
+/**
+Output:
+ 
+First task started
+Sleeping for 2 seconds
+First task completed
+Second task completed
+**/
+```
+
+#### Difference between sleep() and wait()
+
+**sleep()** is a method which is used to pause the process for few seconds or the time we want to.
+
+**wait()** is a method which makes thread go in waiting state and it won't come back automatically until we call notify() or notifyAll().
+
+The main major difference is the **wait()** releases the lock monitor while **sleep()** doesn't release lock or monitor while waiting. **wait()** is used for inter-thread communication while **sleep()** is used to introduce pause on execution, generally. 
+
+Thread.sleep() sends the current thread into the “Not Runnable” state for some amount of time. The thread keeps the monitors it has acquired — i.e. if the thread is currently in a synchronized block or method no other thread can enter this block or method. If another thread calls t.interrupt(). it will wake up the sleeping thread.
+
+While sleep() is a static method which means that it always affects the current thread (the one that is executing the sleep method). A common mistake is to call t.sleep() where t is a different thread; even then, it is the current thread that will sleep, not the t thread.
+
 
 
 
