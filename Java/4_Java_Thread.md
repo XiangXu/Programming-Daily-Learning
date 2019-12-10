@@ -581,7 +581,119 @@ synchronized( lockObject )
 ```
 
 **notifyAll()** wakes up all the threads that called **wait()** on the same object. The hightest priority thread will run first in most of situation, though not guaranteed.
+```java
+package fundamental.threadstudy.wait_notify;
 
+import java.util.List;
+
+public class Consumer implements Runnable
+{
+    private final List<Integer> taskQueue;
+
+    public Consumer(List<Integer> sharedQueue)
+    {
+        this.taskQueue = sharedQueue;
+    }
+
+    @Override
+    public void run()
+    {
+        while (true) {
+            try {
+                consume();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    private void consume() throws InterruptedException {
+        synchronized (taskQueue)
+        {
+            while (taskQueue.isEmpty())
+            {
+                System.out.println("Queue is empty " + Thread.currentThread().getName() + " is waiting, size: " + taskQueue.size());
+                taskQueue.wait();
+            }
+
+            Thread.sleep(1000);
+            int i = taskQueue.remove(0);
+            System.out.println("Consumed: " + i);
+            taskQueue.notifyAll();
+        }
+    }
+}
+
+package fundamental.threadstudy.wait_notify;
+
+import java.util.List;
+
+public class Producer implements Runnable
+{
+    private final List<Integer> taskQueue;
+    private final int MAX_CAPACITY;
+
+    public Producer(List<Integer> sharedQueue, int size)
+    {
+        this.taskQueue = sharedQueue;
+        this.MAX_CAPACITY = size;
+    }
+
+    @Override
+    public void run()
+    {
+        int counter = 0;
+        while (true)
+        {
+            try
+            {
+                produce(counter++);
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void produce(int i) throws InterruptedException
+    {
+        synchronized (taskQueue)
+        {
+            while(taskQueue.size() == MAX_CAPACITY)
+            {
+                System.out.println("Queue is full " + Thread.currentThread().getName() + " is waiting, size " + taskQueue.size());
+                taskQueue.wait();
+            }
+
+            Thread.sleep(1000);
+            taskQueue.add(i);
+            System.out.println("Produced: " + i);
+            taskQueue.notifyAll();
+        }
+    }
+}
+
+
+package fundamental.threadstudy.wait_notify;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ProducerConsumerExampleWithWaitAndNotify
+{
+    public static void main(String[] args)
+    {
+        List<Integer> taskQueue = new ArrayList<>();
+        int MAX_CAPACITY = 5;
+        Thread tProducer = new Thread(new Producer(taskQueue, MAX_CAPACITY), "Producer");
+        Thread tConsumer = new Thread(new Consumer(taskQueue), "Consumer");
+        tProducer.start();
+        tConsumer.start();
+    }
+}
+
+```
 
 #### Difference between yield() and join()
 
@@ -712,7 +824,38 @@ Thread.sleep() sends the current thread into the “Not Runnable” state for so
 While sleep() is a static method which means that it always affects the current thread (the one that is executing the sleep method). A common mistake is to call t.sleep() where t is a different thread; even then, it is the current thread that will sleep, not the t thread.
 
 
+#### Difference between lock and monitor 
 
+##### Locks
+
+**A lock is kind of data which is logically part of an object's header on the heap memory**. Each object in a JVM has this lock (or mutex) that any program can use to coordinate multi-threaded access to the object. If any thread want to access instance variables of that object; the thread must "own" the object's lock(set some flag in lock memory area). All other threads that attempt to access the object’s variables have to wait until the owning thread releases the object’s lock (unset the flag).
+
+Once a thread owns a lock, it can request the same lock again multiple times, but then has to release the lock the same number of times before it is made available to other threads. If a thread requests a lock three times, for example, that thread will continue to own the lock until it has "released" it three times. 
+
+Please note that lock is accquired by a thread, when it explicitly ask for it. In Java, this is done with the synchronized keyword, or with wait and notify.
+
+
+##### Monitors
+
+**Monitor is a synchronization construct that allows threads to have both mutual exclusion(using locks) and cooperation.** the ability to make threads wait for certain condition to be true(using **wait-set**).
+
+In other words, along with data that implement a lock, every Java object is logically associated with data that implements **wait-set**. Whereas locks help threads to work independently on shared data without interfering with one other, wait-sets help threads to cooperate with one another to work together towards a common goal. all waiting threads will be moved to this wait-set and all will be notified once lock is released. **This wait-set helps building monitors with additional help of lock(mutex).**
+
+##### Mutual exclusion
+
+Putting in very simple words, a monitor is like a building that contains one special room (object instance) that can be occupied by only one thread at a time. The room usually contains some data which needs to be protected from concurrent access. From the time a thread enters this room to the time it leaves, it has exclusive access to any data in the room. Entering the monitor building is called “entering the monitor.” Entering the special room inside the building is called “acquiring the monitor.” Occupying the room is called “owning the monitor,” and leaving the room is called “releasing the monitor.” Leaving the entire building is called “exiting the monitor.”
+
+When a thread arrives to access protected data (enter the special room), it is first put in queue in building reception (entry-set). If no other thread is waiting (own the monitor), the thread acquires the lock and continues executing the protected code. When the thread finishes execution, it release the lock and exits the building (exiting the monitor).
+
+If when a thread arrives and another thread is already owning the monitor, it must wait in reception queue (entry-set). When the current owner exits the monitor, the newly arrived thread must compete with any other threads also waiting in the entry-set. Only one thread will win the competition and own the lock.
+
+**There is no role of wait-set feature.**
+
+##### Cooperation
+
+**Cooperation is important when one thread needs some data to be in particular state and another thread is responseible for getting data into that state. producer and consumer problem** where read thread needs the buffer to be in a “not empty” state before it can read any data out of the buffer. If the read thread discovers that the buffer is empty, it must wait. The write thread is responsible for filling the buffer with data. Once the write thread has done some more writing, the read thread can do some more reading. It is also sometimes called a **“Wait and Notify”** OR **“Signal and Continue”** monitor because it retains ownership of the monitor and continues executing the monitor region (the continue) if needed. At some later time, the notifying thread releases the monitor and a waiting thread is resurrected to own the lock.
+
+This cooperation requires both i.e. **entry-set** and **wait-set**. Below given diagram will help you in understand this cooperation.
 
 
 
