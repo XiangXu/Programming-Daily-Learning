@@ -961,6 +961,113 @@ Here we sent a **Callable** object to be executed in an executor using the **sub
 2. **We can get the result returned by the call() method**. For this purpose, we have used the **get()** method. This method waits until the **Callable** object has finished the execution of the **call()** method and has returned its result. If the thread is interrupted while the get() method is waiting for the result, it throws an InterruptedException exception. If the call() method throws an exception, this method throws an ExecutionException exception. The Future interface provides another version of the get() method i.e. get(longtimeout,TimeUnitunit). This version of the get method, if the result of the task isn’t available, waits for it for the specified time. If the specified period of time passes and the result isn’t yet available, the method returns a null value.
 
 
+### How to Restart Thread Using UncaughtExceptionHandler
+
+```java
+class ExceptionHandler implements UncaughtExceptionHandler
+{
+   public void uncaughtException(Thread t, Throwable e)
+   {
+      System.out.printf("An exception has been captured\n");
+      System.out.printf("Thread: %s\n", t.getId());
+      System.out.printf("Exception: %s: %s\n", e.getClass().getName(), e.getMessage());
+      System.out.printf("Stack Trace: \n");
+      e.printStackTrace(System.out);
+      System.out.printf("Thread status: %s\n", t.getState());
+      new Thread(new Task()).start();
+   }
+}
+
+class Task implements Runnable
+{
+   @Override
+   public void run()
+   {
+      Thread.currentThread().setUncaughtExceptionHandler(new ExceptionHandler());
+      System.out.println(Integer.parseInt("123"));
+      System.out.println(Integer.parseInt("234"));
+      System.out.println(Integer.parseInt("345"));
+      System.out.println(Integer.parseInt("XYZ")); //This will cause NumberFormatException
+      System.out.println(Integer.parseInt("456"));
+   }
+}
+```
+
+### AtomicInteger
+
+The **AtomicInteger** class protects an underlying *int* value by providing methods that perform **atomic operation** on the value. It shall not be used as replacement for an **Integer** class.
+
+#### Create, get and set value of AtomicInteger
+```java
+//Initial value is 0
+AtomicInteger atomicInteger = new AtomicInteger();  
+ 
+//Initial value is 100
+AtomicInteger atomicInteger = new AtomicInteger(100);
+ 
+int currentValue = atomicInteger.get();         //100
+ 
+atomicInteger.set(1234); 
+```
+
+#### When to use AutomicInteger in Java
+
+1. As an **atomic counter** which is being used by multiple threads concurrently.
+   
+2. In **compare and swap** operation to implement non-blocking algorithms.
+
+```java
+public class Main 
+{
+    public static void main(String[] args) 
+    {
+        AtomicInteger atomicInteger = new AtomicInteger(100);
+         
+        System.out.println(atomicInteger.addAndGet(2));         //102
+        System.out.println(atomicInteger);                      //102
+         
+        System.out.println(atomicInteger.getAndAdd(2));         //102
+        System.out.println(atomicInteger);                      //104
+         
+        System.out.println(atomicInteger.incrementAndGet());    //105   
+        System.out.println(atomicInteger);                      //105   
+                 
+        System.out.println(atomicInteger.getAndIncrement());    //105
+        System.out.println(atomicInteger);                      //106
+         
+        System.out.println(atomicInteger.decrementAndGet());    //105
+        System.out.println(atomicInteger);                      //105
+         
+        System.out.println(atomicInteger.getAndDecrement());    //105
+        System.out.println(atomicInteger);                      //104
+    }
+}
+```
+
+```java
+
+boolean compareAndSet(int expect, int update)
+
+import java.util.concurrent.atomic.AtomicInteger;
+ 
+public class Main 
+{
+    public static void main(String[] args) 
+    {
+        AtomicInteger atomicInteger = new AtomicInteger(100);
+         
+        boolean isSuccess = atomicInteger.compareAndSet(100,110);   //current value 100
+         
+        System.out.println(isSuccess);      //true
+         
+        isSuccess = atomicInteger.compareAndSet(100,120); //current value 110
+         
+        System.out.println(isSuccess);      //false
+         
+    }
+}
+```
+
 
 
 Reference:
