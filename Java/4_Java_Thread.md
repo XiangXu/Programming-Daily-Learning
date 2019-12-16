@@ -1068,6 +1068,140 @@ public class Main
 }
 ```
 
+### How to use lock in Java
+
+A **java.util.concurrent.locks.lock** is a thread synchronization mechanism just like synchronized blocks. A **lock** is, however, more flexible and more sophisticated(复杂的) than a synchronization block. **Lock** is an interface and **ReentrantLock** is one such implementation of lock interface.
+
+```java
+public class LockExample
+{
+    public static void main(String[] args) {
+        Lock lock = new ReentrantLock();
+        lock.lock();
+        lock.unlock();;
+    }
+}
+```
+
+#### Difference between Lock Interface and synchronized keyword
+
+The main differences between a Lock and synchronized block are:
+
+1. Having a timeout to get access to a **synchronization** block is not possible. Using **Lock.tryLock(long timeout, TimeUtil timeUtil)**, it is possible.
+
+2. The **synchronization** block must be fully contained within a single method. A lock can have it's calls to **lock()** and **unlock()** in seperate methods.
+
+Example:
+
+```java
+package fundamental.threadstudy;
+
+import java.util.Date;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+class PrinterQueue
+{
+    private final Lock queueLock = new ReentrantLock();
+
+    public void printJob(Object document)
+    {
+        queueLock.lock();
+        try
+        {
+            long duration = (long) (Math.random() * 10000);
+            System.out.println(Thread.currentThread().getName() + ": PrintQueue: Printing a Job during "
+                                + (duration / 1000) + " seconds :: Time - " + new Date());
+            Thread.sleep(duration);
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            System.out.printf("%s: The document has been printed\n", Thread.currentThread().getName());
+            queueLock.unlock();
+        }
+
+    }
+}
+
+
+class PrintingJob implements Runnable
+{
+    private PrinterQueue printerQueue;
+
+    public PrintingJob(PrinterQueue printerQueue)
+    {
+        this.printerQueue = printerQueue;
+    }
+
+    @Override
+    public void run()
+    {
+        System.out.printf("%s: Going to print a document\n", Thread.currentThread().getName());
+        printerQueue.printJob(new Object());
+    }
+}
+
+public class LockExample
+{
+    public static void main(String[] args)
+    {
+        PrinterQueue printerQueue = new PrinterQueue();
+        Thread[] thread = new Thread[10];
+        for (int i = 0; i < 10; i++)
+        {
+            thread[i] = new Thread(new PrintingJob(printerQueue), "Thread " + i);
+        }
+        for (int i = 0; i < 10; i++)
+        {
+            thread[i].start();
+        }
+    }
+}
+
+/**
+Output:
+ 
+Thread 0: Going to print a document
+Thread 9: Going to print a document
+Thread 8: Going to print a document
+Thread 7: Going to print a document
+Thread 5: Going to print a document
+Thread 6: Going to print a document
+Thread 4: Going to print a document
+Thread 3: Going to print a document
+Thread 2: Going to print a document
+Thread 1: Going to print a document
+Thread 0: PrintQueue: Printing a Job during 8 seconds :: Time - Tue Jan 06 15:19:02 IST 2015
+Thread 0: The document has been printed
+Thread 9: PrintQueue: Printing a Job during 1 seconds :: Time - Tue Jan 06 15:19:11 IST 2015
+Thread 9: The document has been printed
+Thread 8: PrintQueue: Printing a Job during 8 seconds :: Time - Tue Jan 06 15:19:12 IST 2015
+Thread 8: The document has been printed
+Thread 7: PrintQueue: Printing a Job during 9 seconds :: Time - Tue Jan 06 15:19:21 IST 2015
+Thread 7: The document has been printed
+Thread 5: PrintQueue: Printing a Job during 7 seconds :: Time - Tue Jan 06 15:19:31 IST 2015
+Thread 5: The document has been printed
+Thread 6: PrintQueue: Printing a Job during 5 seconds :: Time - Tue Jan 06 15:19:39 IST 2015
+Thread 6: The document has been printed
+Thread 4: PrintQueue: Printing a Job during 2 seconds :: Time - Tue Jan 06 15:19:44 IST 2015
+Thread 4: The document has been printed
+Thread 3: PrintQueue: Printing a Job during 2 seconds :: Time - Tue Jan 06 15:19:46 IST 2015
+Thread 3: The document has been printed
+Thread 2: PrintQueue: Printing a Job during 5 seconds :: Time - Tue Jan 06 15:19:49 IST 2015
+Thread 2: The document has been printed
+Thread 1: PrintQueue: Printing a Job during 5 seconds :: Time - Tue Jan 06 15:19:54 IST 2015
+Thread 1: The document has been printed
+**/
+```
+
+If you don’t call the unlock() method at the end of the critical section, the other threads that are waiting for that block will be waiting forever, causing a deadlock situation. If you use try-catch blocks in your critical section, don’t forget to put the sentence containing the unlock() method inside the finally section.
+
+
+
 
 
 Reference:
