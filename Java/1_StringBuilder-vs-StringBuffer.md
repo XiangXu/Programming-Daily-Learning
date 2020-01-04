@@ -39,4 +39,4 @@ Reference:
 
 https://www.journaldev.com/538/string-vs-stringbuffer-vs-stringbuilder
 
-https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.18.1)
+https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.18.1
