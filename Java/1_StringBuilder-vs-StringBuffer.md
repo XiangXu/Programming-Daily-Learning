@@ -30,9 +30,8 @@
 
 1. String is immutable whereas StringBuffer and StringBuilder are mutable class. 
    
-2. String concat + operator internally use StringBuffer or StringBuilder class (. However when you are concatenating in a loop, that's usually when the compiler cann't substitue StringBuilder or StringBuffer by itsel.
-
-
+2. String concat + operator internally use StringBuffer or StringBuilder class (. However when you are concatenating in a loop, that's usually when the compiler cann't substitue StringBuilder or StringBuffer by itself.
+   
 3. StringBuffer is thread safe and synchronized whereas StringBuilder is not, that is why StringBuilder is more faster than StringBuffer.
 
 
