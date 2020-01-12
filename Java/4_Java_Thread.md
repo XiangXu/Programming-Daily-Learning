@@ -501,7 +501,7 @@ public class DemoClass
 
 **Class level lock** prevents miltiple threads to enter in *synchronized* block in any of all available instances of the class on running time. This means if in runtime there are 100 instances of *DemoClass*, then only one thread will be execute *demoMethod()* in any one of instance at a time, and all other instances will be locked for other threads. 
 
-Class level lokcing should always be done **to make static data field safe**. As we know that **static** keyword associate data of method to class level, so use locking at static fields or methods to make it on class level.
+Class level locking should always be done **to make static data field safe**. As we know that **static** keyword associate data of method to class level, so use locking at static fields or methods to make it on class level.
 ```java
 public class DemoClass
 {
@@ -544,9 +544,9 @@ public class DemoClass
 
 1. According to the Java language specification you can not use synchronized keyword with constructor. It is illegal and result in compilation error.
 
-2. Do not synchronize on non final field on synchronized block in Java. Because reference of non final field may change any time and then different thread might synchronizing on different objects i.e. no synchronization at all.
+2. **Do not synchronize on non final field on synchronized block in Java. Because reference of non final field may change any time and then different thread might synchronizing on different objects i.e. no synchronization at all**.
 
-3. Do not use String literals because they might be referenced else where in the application and can cause deadlock. String objects created with new keyword can be used safely. But as a best practice, create a new private scoped Object instance OR lock on the shared variable itself which we want to protect. 
+3. **Do not use String literals because they might be referenced else where in the application and can cause deadlock. String objects created with new keyword can be used safely. But as a best practice, create a new private scoped Object instance OR lock on the shared variable itself which we want to protect**. 
 
 
 #### wait(), notify() and notifyAll() 
@@ -855,7 +855,7 @@ If when a thread arrives and another thread is already owning the monitor, it mu
 
 **Cooperation is important when one thread needs some data to be in particular state and another thread is responseible for getting data into that state. producer and consumer problem** where read thread needs the buffer to be in a “not empty” state before it can read any data out of the buffer. If the read thread discovers that the buffer is empty, it must wait. The write thread is responsible for filling the buffer with data. Once the write thread has done some more writing, the read thread can do some more reading. It is also sometimes called a **“Wait and Notify”** OR **“Signal and Continue”** monitor because it retains ownership of the monitor and continues executing the monitor region (the continue) if needed. At some later time, the notifying thread releases the monitor and a waiting thread is resurrected to own the lock.
 
-This cooperation requires both i.e. **entry-set** and **wait-set**. Below given diagram will help you in understand this cooperation.
+This cooperation requires both i.e. **entry-set** and **wait-set**.
 
 ### Java Callable Future Example
 
