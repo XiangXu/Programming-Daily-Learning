@@ -700,7 +700,7 @@ public class ProducerConsumerExampleWithWaitAndNotify
 ##### yield()
 
    1. yield is a static method and native too.
-   2. yield tells the currently executing thread to give a chance to the threads that have equal priority in the Thread Poo..
+   2. yield tells the currently executing thread to give a chance to the threads that have equal priority in the Thread Pool.
    3. There is no guarantee that yield will make currently executing thread to runnable state immediately.
    4. It can only make a thread from Running State to Runnable State, not wait or blocked state.
 
@@ -1201,6 +1201,157 @@ Thread 1: The document has been printed
 If you don’t call the unlock() method at the end of the critical section, the other threads that are waiting for that block will be waiting forever, causing a deadlock situation. If you use try-catch blocks in your critical section, don’t forget to put the sentence containing the unlock() method inside the finally section.
 
 
+### Creating Threads using java.util.concurrent.ThreadFactory
+
+The centeralization of creation logic brings us some advantages
+1. It is easy to change the class of the objects created or the way we create these objects.
+
+2. It is easy to limit the creation of objects for limited resources. For example, we can only have N objects of a type.
+
+3. It is easy to generate statistical data about the creation of the objects. 
+
+```java
+package fundamental.threadstudy.thread_factory;
+
+import java.util.concurrent.TimeUnit;
+
+public class Task implements Runnable
+{
+    @Override
+    public void run()
+    {
+        try
+        {
+            TimeUnit.SECONDS.sleep(2);
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+    }
+}
+
+package fundamental.threadstudy.thread_factory;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.ThreadFactory;
+
+public class CustomThreadFactory implements ThreadFactory
+{
+    private int counter;
+    private String name;
+    private List<String> stats;
+
+    public CustomThreadFactory(String name)
+    {
+        counter = 1;
+        this.name = name;
+        stats = new ArrayList<>();
+    }
+
+    @Override
+    public Thread newThread(Runnable runnable)
+    {
+        Thread thread = new Thread(runnable, name + "-Thread_" + counter);
+        counter++;
+        stats.add(String.format("Created thread %d with name %s on %s \n", thread.getId(), thread.getName(), new Date()));
+        return thread;
+    }
+
+    public String getStats()
+    {
+        StringBuffer buffer = new StringBuffer();
+        Iterator<String> it = stats.iterator();
+        while (it.hasNext())
+        {
+            buffer.append(it.next());
+        }
+        return buffer.toString();
+    }
+
+    public static void main(String[] args)
+    {
+        CustomThreadFactory factory = new CustomThreadFactory("CustomThreadFactory");
+        Task task = new Task();
+        Thread thread;
+        System.out.printf("Starting the Threads\n\n");
+        for (int i = 1; i <= 10; i++)
+        {
+            thread = factory.newThread(task);
+            thread.start();
+        }
+        System.out.printf("All Threads are created now\n\n");
+        System.out.printf("Give me CustomThreadFactory stats:\n\n" + factory.getStats());
+    }
+}
+
+/**
+Output :
+ 
+Starting the Threads
+ 
+All Threads are created now
+ 
+Give me CustomThreadFactory stats:
+ 
+Created thread 9 with name CustomThreadFactory-Thread_1 on Tue Jan 06 13:18:04 IST 2015
+Created thread 10 with name CustomThreadFactory-Thread_2 on Tue Jan 06 13:18:04 IST 2015
+Created thread 11 with name CustomThreadFactory-Thread_3 on Tue Jan 06 13:18:04 IST 2015
+Created thread 12 with name CustomThreadFactory-Thread_4 on Tue Jan 06 13:18:04 IST 2015
+Created thread 13 with name CustomThreadFactory-Thread_5 on Tue Jan 06 13:18:04 IST 2015
+Created thread 14 with name CustomThreadFactory-Thread_6 on Tue Jan 06 13:18:04 IST 2015
+Created thread 15 with name CustomThreadFactory-Thread_7 on Tue Jan 06 13:18:04 IST 2015
+Created thread 16 with name CustomThreadFactory-Thread_8 on Tue Jan 06 13:18:04 IST 2015
+Created thread 17 with name CustomThreadFactory-Thread_9 on Tue Jan 06 13:18:04 IST 2015
+Created thread 18 with name CustomThreadFactory-Thread_10 on Tue Jan 06 13:18:04 IST 2015
+**/
+
+```
+
+
+### ExecutorService in Java
+
+
+#### What is Executor Framework?
+
+In simple Java application, we do not face much challenge while working with a small number of threads. If you have to develop a program runs a lot of concurrent tasks, this approach will present many disadvantages such as lots of bolier plate code, executing thread manually and keeping track of thread execution results.
+
+**Benefit of Executor framework**
+
+1. The framework mainly seperates task creation and execution. Task creation is mainly boiler plate code and is easily replaceable.
+
+2. With an executor, we have to create task which implement either **Runable** or **Callable** interface and send them to the executor.
+
+3. Executor internally maintain a (configurable) thread pool to improve application performance by avoiding the continous spawning of threads.
+
+4. Executor is responseible for executing the tasks, running them with the necessary threads from the pool.
+
+**Callable and Future**
+
+1. It's **call()** method returns a result after the thread execution is complete.
+
+2. When we send a **callable()** object to an executor, we get **Future** object's reference. We can use this object to query the status of thread and the result of the **Callable** object.
+
+
+#### Creating ExecutorService instances
+
+**ExecutorService** is an interface and it's implementations can execute a **Runnable** or **Callable** class in an asynchronous way. Note that invoking the **run()** method of a **Runnable** interface in a synchronous way is simply calling a method.
+
+```java
+//Executes only one thread
+ExecutorService es = Executors.newSingleThreadExecutor(); 
+ 
+//Internally manages thread pool of 2 threads
+ExecutorService es = Executors.newFixedThreadPool(2); 
+ 
+//Internally manages thread pool of 10 threads to run scheduled tasks
+ExecutorService es = Executors.newScheduledThreadPool(10); 
+
+ExecutorService executorService = new ThreadPoolExecutor(10, 100, 5L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
+```
 
 
 
