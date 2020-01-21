@@ -1319,6 +1319,8 @@ Created thread 18 with name CustomThreadFactory-Thread_10 on Tue Jan 06 13:18:04
 
 In simple Java application, we do not face much challenge while working with a small number of threads. If you have to develop a program runs a lot of concurrent tasks, this approach will present many disadvantages such as lots of bolier plate code, executing thread manually and keeping track of thread execution results.
 
+**Exexutor framework** solved this problem. The framework consist of three main interfaces(and lots of child interfaces). **Executor, ExecutorService** and **ThreadPoolExecutor**.
+
 **Benefit of Executor framework**
 
 1. The framework mainly seperates task creation and execution. Task creation is mainly boiler plate code and is easily replaceable.
@@ -1353,7 +1355,11 @@ ExecutorService es = Executors.newScheduledThreadPool(10);
 ExecutorService executorService = new ThreadPoolExecutor(10, 100, 5L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
 ```
 
+#### Submitting tasks to ExecutorService
 
+**Execute Runnable Tasks**
+
+We can execute 
 
 Reference:
 
