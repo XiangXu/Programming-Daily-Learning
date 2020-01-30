@@ -1359,7 +1359,165 @@ ExecutorService executorService = new ThreadPoolExecutor(10, 100, 5L, TimeUnit.M
 
 **Execute Runnable Tasks**
 
-We can execute 
+We can execute runnables using the following methods:
+
+1. **void execute(Runnable task)** - executes the given command at some time in the future. 
+
+2. **Future submit(Runnable taks)** - submits a runnable task for execution and return a *Future* representing that task. The future's *get()* method will return *null* upon successful completion. 
+
+3. **Future submit(Runnable task, T result)** - Submits a runnable task for execution and returns a *Future* representing that task. The future's *get()* method will return the given *result* upon successful completion.
+
+```java
+
+package fundamental.threadstudy;
+
+import java.time.LocalDateTime;
+import java.util.concurrent.*;
+
+public class ExecuteServiceExample
+{
+    public static void main(String[] args)
+    {
+        Runnable runnableTask = () -> {
+            try
+            {
+                TimeUnit.MILLISECONDS.sleep(1000);
+                System.out.println("Current time: " + LocalDateTime.now());
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+        };
+
+        // Executor service instance
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+
+        // 1. execute task using execute() method
+        executorService.execute(runnableTask);
+
+        // 2. execute task using submit method
+        Future<String> result = executorService.submit(runnableTask, "DONE");
+
+        while (result.isDone() == false)
+        {
+            try
+            {
+                System.out.println("The method return value : " + result.get());
+                break;
+            }
+            catch (InterruptedException | ExecutionException e)
+            {
+                e.printStackTrace();
+            }
+
+            try
+            {
+                Thread.sleep(1000L);
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        // Shut down the executor service
+        executorService.shutdownNow();
+    }
+}
+
+// Current time :: 2019-05-21T17:52:53.274
+// Current time :: 2019-05-21T17:52:53.274
+// The method return value : DONE
+```
+
+**Execute Callable tasks**
+
+We can execute callable tasks using the following methods:
+
+1. **Future submit(callableTask)** - submits a value-returning task for execution and returns a future representing the pending results of task.
+
+2. **List<Future>invokeAll(Collection tasks)** – executes the given tasks, returning a list of Futures holding their status and results when all complete. Notice that result is available only when all tasks are completed.
+Note that a completed task could have terminated either normally or by throwing an exception.
+
+3. **List<Future> invokeAll(Collection tasks, timeOut, timeUnit)** – executes the given tasks, returning a list of Futures holding their status and results when all complete or the timeout expires.
+
+```java
+package fundamental.threadstudy;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.*;
+
+public class ExecuteCallableServiceExample
+{
+    public static void main(String[] args)
+    {
+        Callable<String> callableTask = () -> {
+            TimeUnit.MILLISECONDS.sleep(1000);
+            return "Current time: " + LocalDateTime.now();
+        };
+
+        ExecutorService executorService = Executors.newFixedThreadPool(1);
+
+        List<Callable<String>> taskList = Arrays.asList(callableTask, callableTask, callableTask);
+
+        try
+        {
+            List<Future<String>> results = executorService.invokeAll(taskList);
+
+            for (Future<String> result: results)
+            {
+                System.out.println(result.get());
+            }
+        }
+        catch (InterruptedException | ExecutionException e1)
+        {
+            e1.printStackTrace();
+        }
+
+        Future<String> result = executorService.submit(callableTask);
+
+        while(result.isDone() == false)
+        {
+            try
+            {
+                System.out.println("The method return value : " + result.get());
+                break;
+            }
+            catch (InterruptedException | ExecutionException e)
+            {
+                e.printStackTrace();
+            }
+
+            //Sleep for 1 second
+            try {
+                Thread.sleep(1000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        executorService.shutdownNow();
+    }
+}
+
+// Current time :: 2019-05-21T18:35:53.512
+// Current time :: 2019-05-21T18:35:54.513
+// Current time :: 2019-05-21T18:35:55.514
+// The method return value : Current time :: 2019-05-21T18:35:56.515
+```
+
+
+**How to shutdown ExecutorService**
+
+1. **void shutdown()** - Initiates(开始) an orderly shutdown in which previously submitted tasks are executed, but no new tasks will be accepted. 
+
+2. **List<Runnable>shutdownNow()** Attempts to stop all actively executing tasks, halts the processing of waiting tasks, and returns a list of the tasks that were awaiting execution.
+
+3. **void awaitTermination()** It blocks until all tasks have completed execution after a shutdown request, or the timeout occurs, or the current thread is interrupted, whichever happens first.
+
 
 Reference:
 
