@@ -1519,6 +1519,191 @@ public class ExecuteCallableServiceExample
 3. **void awaitTermination()** It blocks until all tasks have completed execution after a shutdown request, or the timeout occurs, or the current thread is interrupted, whichever happens first.
 
 
+### ThreadPoolExecutor Example
+
+#### How thread pool works in Java
+
+**A thread pool is a collection of pre-initialized threads.** Generally, the size of collection is fixed, but it is not mandatory. It facilitates the execution of N number of tasks using the same threads. If there are more tasks than threads, then tasks need to wait in a queue like structure.
+
+When a thread completes its execution, it can pickup a new task from the queue and execute it. When all tasks are completed the threads remain active and wait for more tasks in the thread pool.
+
+A watcher keep watching queue (using BlockingQueue) for any new tasks. As soon as task come, threads again start picking up tasks and execute them.
+
+#### ThreadPoolExecutor
+
+1. **Fixed thread pool executor** - Creates a thread pool that reuses a fixed number of threads to execute any number of tasks. If additional tasks are submitted when all threads are active, they will wait in the queue until a thread is available. It is the best fit for most of the real-life-case.
+```java
+ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
+```
+
+2. **Cached thread pool executor** - Creates a thread pool that creates new threads as needed, but will reuse previously constructed threads when they are available. DO NOT use this thread pool if tasks are long - running. It can bring down system if the number of threads goes beyond what the system can handle.
+```java
+ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
+```
+
+3. **Scheduled thread pool executor** - Creates a thread pool that can schedule commands to run after a given delay, or to execute periodically.
+```java
+ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newScheduledThreadPool(10);
+```
+
+4. **Single thread pool executor** - Create single thread to execute all tasks. Use it when you have only one task to execute. 
+```java
+ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newSingleThreadExecutor();
+```
+
+5. **Work stealing thread pool executor** - Creates a thread pool that maintains enough threads to support the given parallelism level. Here parallelism level means the maximum number of threads which will be used to execute a given task, at a single point of time, in multi-processor machines.
+```java
+ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newWorkStealingPool(4);
+```
+
+#### ThreadPoolEexcutor Example
+
+Create Task:
+```java
+package fundamental.threadstudy.thread_pool_executor_example;
+
+import java.util.concurrent.TimeUnit;
+
+public class Task implements Runnable
+{
+    private String name;
+
+    public Task(String name)
+    {
+        this.name = name;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    @Override
+    public void run()
+    {
+        try
+        {
+            Long duration = (long) (Math.random() * 10);
+            System.out.println("Executing: " + name);
+            TimeUnit.SECONDS.sleep(duration);
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+Execute tasks with thread pool executor
+```java
+package fundamental.threadstudy.thread_pool_executor_example;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+
+public class ThreadPoolExecutorExample
+{
+    public static void main(String[] args)
+    {
+        ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(2);
+        for (int i = 0; i <=5 ; i++)
+        {
+            Task task = new Task("Task: " + i);
+            System.out.println("Created: " + task.getName());
+            threadPoolExecutor.execute(task);
+        }
+
+        threadPoolExecutor.shutdown();
+    }
+}
+
+// Created : Task 1
+// Created : Task 2
+// Created : Task 3
+// Created : Task 4
+// Created : Task 5
+// Executing : Task 1
+// Executing : Task 2
+// Executing : Task 3
+// Executing : Task 4
+// Executing : Task 5
+```
+
+#### ScheduledThreadPoolExecutor
+
+Fixed thread pools or cached thread pools are good when you have to execute one unique task only once. When you need to execute a task, repeatedly N times, either N fixed number of times or infinitely after fixed delay, you should be using ScheduledThreadPoolExecutor.
+
+**ScheduledThreadPoolExecutor** provides 4 methods which provide different capabilities to execute the tasks in repeated number.
+
+1. **ScheduledFuture schedule(Runnable command, long delay, TimeUnit unit)** - Creates and executes a task that becomes enabled after the given delay. 
+
+2. **ScheduledFuture schedule(Callable callable, long delay, TimeUnit unit)** - Creates and executes a **ScheduledFuture** that becomes enabled after the given delay.
+
+3. **ScheduledFuture scheduleAtFixedRate(Runnable command, long initialDelay, long delay, TimeUnit unit)** - Creates and executes a periodic action that becomes enabled first after the given initial delay, and subsequently with the given *delay* period. If any execution of this task taks longer than its period, then **subsequent executions may start late, but will not concurrently execute**.
+
+4. **ScheduledFuture scheduleWithFixedDelay(Runnable command, long initialDelay, long delay, TimeUnit unit)** – Creates and executes a periodic action that becomes enabled first after the given initial delay, and subsequently with the given delay period. No matter how much time a long running task takes, there will be a fixed delay time gap between two executions.
+```java
+package fundamental.threadstudy;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+class Task implements Runnable
+{
+    private String name;
+
+    public Task(String name)
+    {
+        this.name = name;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    @Override
+    public void run()
+    {
+        System.out.println("Executing : " + name + ", Current Seconds : " + new Date());
+    }
+}
+
+public class ScheduledThreadPoolExecutorExample
+{
+    public static void main(String[] args)
+    {
+        ScheduledThreadPoolExecutor executor = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(2);
+
+        Task task = new Task("Repeat Task");
+        System.out.println("Created : " + task.getName());
+
+        executor.scheduleWithFixedDelay(task, 2, 2, TimeUnit.SECONDS);
+    }
+}
+```
+
+**Summary
+
+1. One critical aspect of the ThreadPoolExecutor class, and of the executors in general, is that you have to end it explicitly. If you don’t do this, the executor will continue its execution and the program won’t end. If the executor doesn’t have tasks to execute, it continues waiting for new tasks and it doesn’t end its execution. A Java application won’t end until all its non-daemon threads finish their execution, so, if you don’t terminate the executor, your application will never end.
+
+
+2. The ThreadPoolExecutor class also provides other methods related with the finalization of the executor. These methods are:
+
+**shutdownNow()**: This method shut downs the executor immediately. It doesn’t execute the pending tasks. It returns a list with all these pending tasks. The tasks that are running when you call this method continue with their execution, but the method doesn’t wait for their finalization.
+
+**isTerminated()**: This method returns true if you have called the shutdown() or shutdownNow() methods and the executor finishes the process of shutting it down.
+
+**isShutdown()**: This method returns true if you have called the shutdown() method of the executor.
+awaitTermination(long timeout,TimeUnitunit): This method blocks the calling thread until the tasks of the executor have ended or the timeout occurs. The TimeUnit class is an enumeration with the following constants: DAYS, HOURS, MICROSECONDS etc.
+
+**awaitTermination(long timeout,TimeUnitunit)**: This method blocks the calling thread until the tasks of the executor have ended or the timeout occurs. The TimeUnit class is an enumeration with the following constants: DAYS, HOURS, MICROSECONDS etc.
+
+
 Reference:
 
 https://www.javaworld.com/article/2077138/introduction-to-java-threads.html
