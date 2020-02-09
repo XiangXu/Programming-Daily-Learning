@@ -1704,6 +1704,321 @@ awaitTermination(long timeout,TimeUnitunit): This method blocks the calling thre
 **awaitTermination(long timeout,TimeUnitunit)**: This method blocks the calling thread until the tasks of the executor have ended or the timeout occurs. The TimeUnit class is an enumeration with the following constants: DAYS, HOURS, MICROSECONDS etc.
 
 
+### Binary Semaphore Tutorial and Exmaple
+
+A semaphore is a counter that protects the access to one or more shared resources. 
+
+#### How Semaphore Work?
+
+You can visualize a semaphore as **counter which can incremented or decremented**. 
+
+You initialize the semaphore with a number i.e. 5. Now this semaphore can be decremented maximum five times in a row until counter reaches to 0. Once counter is zero, you can increment it to maximum five times to make it 5. The counter value of semaphore MUST always be inside limit **0 >= n >= 5**(in our case).
+
+Obviously, semaphores are more than just being counters. They are able to make threads wait when counter value is zero i.e. they act as Locks with counter functionality.
+
+Talking in terms of multi-threading, when a thread wants to access one of shared resources (guarded by semaphore), first, it must acquire the semaphore. If the internal counter of the semaphore is greater than 0, the semaphore decrements the counter and allows access to the shared resource. Otherwise, if the counter of the semaphore is 0, the semaphore puts the thread to sleep until the counter is greater than 0. A value of 0 in the counter means all the shared resources are used by other threads, so the thread that wants to use one of them must wait until one is free.
+
+#### When to use Binary Semaphore?
+
+**binary semaphore can have value either 0 or 1**, It means **binary semaphore protect access to a SINGLE shared resource**, so the internal counter of the semaphore can only take the values of 1 or 0.
+```java
+package fundamental.threadstudy;
+
+import java.util.Date;
+import java.util.concurrent.Semaphore;
+
+class PrinterQueue
+{
+    private final Semaphore semaphore;
+
+    public PrinterQueue()
+    {
+        semaphore = new Semaphore(1);
+    }
+
+    public void printJob(Object document)
+    {
+        try
+        {
+            semaphore.acquire();
+            Long duration = (long) (Math.random() * 10000);
+            System.out.println(Thread.currentThread().getName() + ": PrintQueue: Printing a Job during " + (duration / 1000) + " seconds :: Time - " + new Date());
+            Thread.sleep(duration);
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            System.out.printf("%s: The document has been printed\n", Thread.currentThread().getName());
+            semaphore.release();
+        }
+    }
+}
+
+class PrintingJob implements Runnable
+{
+    private PrinterQueue printerQueue;
+
+    public PrintingJob(PrinterQueue printerQueue)
+    {
+        this.printerQueue = printerQueue;
+    }
+
+    @Override
+    public void run()
+    {
+        System.out.printf("%s: Going to print a document\n", Thread.currentThread().getName());
+        printerQueue.printJob(new Object());
+    }
+}
+
+public class BinarySemaphoreExample
+{
+    public static void main(String[] args)
+    {
+        PrinterQueue printerQueue = new PrinterQueue();
+        Thread thread[] = new Thread[10];
+        for (int i = 0; i < 10; i++)
+        {
+            thread[i] = new Thread(new PrintingJob(printerQueue), "Thread " + i);
+        }
+        for (int i = 0; i < 10; i++)
+        {
+            thread[i].start();
+        }
+    }
+}
+
+/**
+Output:
+ 
+Thread 0: Going to print a document
+Thread 9: Going to print a document
+Thread 8: Going to print a document
+Thread 5: Going to print a document
+Thread 7: Going to print a document
+Thread 6: Going to print a document
+Thread 3: Going to print a document
+Thread 4: Going to print a document
+Thread 2: Going to print a document
+Thread 1: Going to print a document
+Thread 0: PrintQueue: Printing a Job during 3 seconds :: Time - Tue Jan 06 18:00:12 IST 2015
+Thread 0: The document has been printed
+Thread 9: PrintQueue: Printing a Job during 0 seconds :: Time - Tue Jan 06 18:00:16 IST 2015
+Thread 9: The document has been printed
+Thread 8: PrintQueue: Printing a Job during 7 seconds :: Time - Tue Jan 06 18:00:16 IST 2015
+Thread 8: The document has been printed
+Thread 5: PrintQueue: Printing a Job during 0 seconds :: Time - Tue Jan 06 18:00:24 IST 2015
+Thread 5: The document has been printed
+Thread 7: PrintQueue: Printing a Job during 4 seconds :: Time - Tue Jan 06 18:00:24 IST 2015
+Thread 7: The document has been printed
+Thread 6: PrintQueue: Printing a Job during 3 seconds :: Time - Tue Jan 06 18:00:29 IST 2015
+Thread 6: The document has been printed
+Thread 3: PrintQueue: Printing a Job during 8 seconds :: Time - Tue Jan 06 18:00:33 IST 2015
+Thread 3: The document has been printed
+Thread 4: PrintQueue: Printing a Job during 0 seconds :: Time - Tue Jan 06 18:00:41 IST 2015
+Thread 4: The document has been printed
+Thread 2: PrintQueue: Printing a Job during 4 seconds :: Time - Tue Jan 06 18:00:42 IST 2015
+Thread 2: The document has been printed
+Thread 1: PrintQueue: Printing a Job during 3 seconds :: Time - Tue Jan 06 18:00:46 IST 2015
+Thread 1: The document has been printed
+**/
+
+Output:
+ 
+Thread 0: Going to print a document
+Thread 9: Going to print a document
+Thread 8: Going to print a document
+Thread 5: Going to print a document
+Thread 7: Going to print a document
+Thread 6: Going to print a document
+Thread 3: Going to print a document
+Thread 4: Going to print a document
+Thread 2: Going to print a document
+Thread 1: Going to print a document
+Thread 0: PrintQueue: Printing a Job during 3 seconds :: Time - Tue Jan 06 18:00:12 IST 2015
+Thread 0: The document has been printed
+Thread 9: PrintQueue: Printing a Job during 0 seconds :: Time - Tue Jan 06 18:00:16 IST 2015
+Thread 9: The document has been printed
+Thread 8: PrintQueue: Printing a Job during 7 seconds :: Time - Tue Jan 06 18:00:16 IST 2015
+Thread 8: The document has been printed
+Thread 5: PrintQueue: Printing a Job during 0 seconds :: Time - Tue Jan 06 18:00:24 IST 2015
+Thread 5: The document has been printed
+Thread 7: PrintQueue: Printing a Job during 4 seconds :: Time - Tue Jan 06 18:00:24 IST 2015
+Thread 7: The document has been printed
+Thread 6: PrintQueue: Printing a Job during 3 seconds :: Time - Tue Jan 06 18:00:29 IST 2015
+Thread 6: The document has been printed
+Thread 3: PrintQueue: Printing a Job during 8 seconds :: Time - Tue Jan 06 18:00:33 IST 2015
+Thread 3: The document has been printed
+Thread 4: PrintQueue: Printing a Job during 0 seconds :: Time - Tue Jan 06 18:00:41 IST 2015
+Thread 4: The document has been printed
+Thread 2: PrintQueue: Printing a Job during 4 seconds :: Time - Tue Jan 06 18:00:42 IST 2015
+Thread 2: The document has been printed
+Thread 1: PrintQueue: Printing a Job during 3 seconds :: Time - Tue Jan 06 18:00:46 IST 2015
+Thread 1: The document has been printed
+
+
+package fundamental.threadstudy.semaphore;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+class PrinterQueue
+{
+    private final Semaphore semaphore;
+    private final Lock printerLock;
+    private boolean freePrinters[];
+
+    public PrinterQueue()
+    {
+        semaphore = new Semaphore(3);
+        freePrinters = new boolean[3];
+        Arrays.fill(freePrinters, true);
+        printerLock = new ReentrantLock();
+    }
+
+    public void printJob(Object document)
+    {
+        try
+        {
+            //Decrease the semaphore counter to mark a printer busy
+            semaphore.acquire();
+
+            //Get the free printer
+            int assignedPrinter = getPrinter();
+
+            //Print the job
+            Long duration = (long) (Math.random() * 10000);
+            System.out.println(Thread.currentThread().getName()
+                    + ": Printer " + assignedPrinter
+                    + " : Printing a Job during " + (duration / 1000)
+                    + " seconds :: Time - " + new Date());
+            Thread.sleep(duration);
+
+            //Printing is done; Free the printer to be used by other threads.
+            releasePrinter(assignedPrinter);
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        finally {
+            System.out.printf("%s: The document has been printed\n", Thread
+                    .currentThread().getName());
+
+            //Increase the semaphore counter back
+            semaphore.release();
+        }
+    }
+
+
+    private int getPrinter()
+    {
+        int foundPrinter = -1;
+        try
+        {
+            printerLock.lock();
+
+            for (int i = 0; i < freePrinters.length; i++)
+            {
+                if(freePrinters[i]){
+                    foundPrinter = i;
+                    freePrinters[i] = false;
+                    break;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            printerLock.unlock();
+        }
+        return foundPrinter;
+    }
+
+    //Release the printer
+    private void releasePrinter(int i) {
+        printerLock.lock();
+        //Mark the printer free
+        freePrinters[i] = true;
+        printerLock.unlock();
+    }
+}
+
+class PrintingJob implements Runnable {
+    private PrinterQueue printerQueue;
+
+    public PrintingJob(PrinterQueue printerQueue) {
+        this.printerQueue = printerQueue;
+    }
+
+    @Override
+    public void run() {
+        System.out.printf("%s: Going to print a document\n", Thread
+                .currentThread().getName());
+        printerQueue.printJob(new Object());
+    }
+}
+
+public class SemaphoreExample {
+    public static void main(String[] args)
+    {
+        PrinterQueue printerQueue = new PrinterQueue();
+        Thread thread[] = new Thread[10];
+        for (int i = 0; i < 10; i++)
+        {
+            thread[i] = new Thread(new PrintingJob(printerQueue), "Thread " + i);
+        }
+        for (int i = 0; i < 10; i++)
+        {
+            thread[i].start();
+        }
+    }
+}
+
+/**
+Output:
+ 
+Thread 1: Going to print a document
+Thread 4: Going to print a document
+Thread 9: Going to print a document
+Thread 8: Going to print a document
+Thread 6: Going to print a document
+Thread 7: Going to print a document
+Thread 2: Going to print a document
+Thread 5: Going to print a document
+Thread 3: Going to print a document
+Thread 0: Going to print a document
+Thread 9: PrintQueue 2 : Printing a Job during 2 seconds :: Time - Tue Jan 13 16:28:58 IST 2015
+Thread 4: PrintQueue 1 : Printing a Job during 7 seconds :: Time - Tue Jan 13 16:28:58 IST 2015
+Thread 1: PrintQueue 0 : Printing a Job during 1 seconds :: Time - Tue Jan 13 16:28:58 IST 2015
+Thread 1: The document has been printed
+Thread 8: PrintQueue 0 : Printing a Job during 1 seconds :: Time - Tue Jan 13 16:29:00 IST 2015
+Thread 9: The document has been printed
+Thread 6: PrintQueue 2 : Printing a Job during 0 seconds :: Time - Tue Jan 13 16:29:01 IST 2015
+Thread 6: The document has been printed
+Thread 7: PrintQueue 2 : Printing a Job during 4 seconds :: Time - Tue Jan 13 16:29:01 IST 2015
+Thread 8: The document has been printed
+Thread 2: PrintQueue 0 : Printing a Job during 5 seconds :: Time - Tue Jan 13 16:29:02 IST 2015
+Thread 7: The document has been printed
+Thread 5: PrintQueue 2 : Printing a Job during 8 seconds :: Time - Tue Jan 13 16:29:05 IST 2015
+Thread 4: The document has been printed
+Thread 3: PrintQueue 1 : Printing a Job during 4 seconds :: Time - Tue Jan 13 16:29:06 IST 2015
+Thread 2: The document has been printed
+Thread 0: PrintQueue 0 : Printing a Job during 4 seconds :: Time - Tue Jan 13 16:29:08 IST 2015
+Thread 3: The document has been printed
+Thread 0: The document has been printed
+Thread 5: The document has been printed
+**/
+```
+
 Reference:
 
 https://www.javaworld.com/article/2077138/introduction-to-java-threads.html
