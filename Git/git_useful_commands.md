@@ -44,7 +44,7 @@ git branch -m <new-branchname>
 git checkout -b <branch-name>
 ``
 
-** Checkout **
+**Checkout**
 e.g. checkout tag v1.0 code.
 ```
 git fetch --all
@@ -52,7 +52,7 @@ git tag
 git checkout v1.0
 ```
 
-** Push tag **
+**Push tag**
 e.g. push tag v1.1.0 with msg 
 ```
 git tag -d v1.1.0
