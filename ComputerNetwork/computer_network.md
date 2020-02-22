@@ -14,6 +14,8 @@
 
 **IP**: An Internet Protocol address is also known as IP address. It is a numerical label which assigned to each device connected to a computer network which use the IP for communicaiton. 
 
+**MAC(Media Access Control ) Address**: it is a unique identifier assigned to network interface controller for use as a network address in communicaiton within a network segment.
+
 **NFS(Network File System)**: it allows a user on a client computer to access files over a computer network much like local storage is accessed. 
 
 **SNMP(Simple Network Management Protocol)****: it is an Internet Standard protocol for collecting and organizing information about managed devices on IP network and for modifying that information to change device behavior. 
@@ -41,6 +43,8 @@ Memory:
 
 
 ## OSI and TCP/IP Model
+
+Read: https://www.zhihu.com/question/19918493
 
 ### OSI Model
 
