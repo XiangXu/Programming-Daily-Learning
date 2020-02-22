@@ -136,3 +136,5 @@ https://kb.iu.edu/d/agki
 https://www.webopedia.com/quick_ref/OSI_Layers.asp#OSI-5
 
 https://en.wikipedia.org/
+
+https://www.geeksforgeeks.org/tcp-ip-model/
