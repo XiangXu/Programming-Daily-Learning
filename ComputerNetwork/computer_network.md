@@ -138,5 +138,3 @@ https://www.webopedia.com/quick_ref/OSI_Layers.asp#OSI-5
 https://en.wikipedia.org/
 
 https://www.geeksforgeeks.org/tcp-ip-model/
-
-https://zhuanlan.zhihu.com/p/105060370?utm_source=wechatMessage_article_bottom
