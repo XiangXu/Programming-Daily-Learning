@@ -88,9 +88,44 @@ The LLC layer controls frame synchronization, flow control and error check.
 
 It provides the hardware means of sending and receiving data on a carrier, including defining cables, cards and physical aspects. 
 
+### TCP/IP Model
+
+| English  	| 中文     	 | 口诀	|
+|--------------------	|------------	|----	|
+| Application Layer  	| 应用层     	| 用 	|
+| Transport Layer    	| 传输层     	| 淑 	|
+| Internet Layer      	| 网络层     	| 网 	|
+| Network Access / Link Layer    	| 网络接口层 	 | 连 	|
 
 
+### Application Layer
 
+This Layers performs the functions of top three layers of the OSI model: Application, Presentation, Session Layer. It is responsible for node-to-node communication and controls user-interface specifications. 
+
+### Transport Layer
+
+Same like transport layer of the OSI model.
+
+### Internet Layer
+
+Samoe like network layer of the OSI model
+
+### Network Access Layer
+
+This layer corresponds to the combination of Data Link Layer and Physical Layer of the OSI model.
+
+
+Difference between TCP/IP and OSI Model:
+
+| TCP/IP                                                                           | OSI                                                 |
+|----------------------------------------------------------------------------------|-----------------------------------------------------|
+| TCP refers to Transmission Control Protocol.                                     | OSI refers to Open Systems Interconnection          |
+| TCP/IP has 4 layers.                                                             | OSI has 7 layers.                                   |
+| TCP/IP is more reliable                                                          | OSI is less reliable                                |
+| TCP/IP does not have very strict boundaries.                                     | OSI has strict boundaries                           |
+| TCP/IP follow a horizontal approach.                                             | OSI follows a vertical approach.                    |
+| TCP/IP uses both session and presentation layer in the application layer itself. | OSI uses different session and presentation layers. |
+| TCP/IP developed protocols then model.                                           | OSI developed model then protocol.                  |
 
 
 
