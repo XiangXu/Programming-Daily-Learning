@@ -12,9 +12,13 @@
 
 **Hub->Bridge->Switch**: A switch is is designed to connect computer within a network.
 
+**Subnet Mask(子网掩码)**: It is a 32 bit number that masks IP address, and divides the IP address into network address and host address. 
+
 **IP**: An Internet Protocol address is also known as IP address. It is a numerical label which assigned to each device connected to a computer network which use the IP for communicaiton. 
 
 **MAC(Media Access Control ) Address**: it is a unique identifier assigned to network interface controller for use as a network address in communicaiton within a network segment.
+
+**DNS(Domain Name System)**: The Domain Name System (DNS) is the phonebook of the Internet. Humans access information online through domain names, like nytimes.com or espn.com. 
 
 **NFS(Network File System)**: it allows a user on a client computer to access files over a computer network much like local storage is accessed. 
 
@@ -142,3 +146,5 @@ https://www.webopedia.com/quick_ref/OSI_Layers.asp#OSI-5
 https://en.wikipedia.org/
 
 https://www.geeksforgeeks.org/tcp-ip-model/
+
+https://www.cloudflare.com/learning/dns/what-is-dns/
