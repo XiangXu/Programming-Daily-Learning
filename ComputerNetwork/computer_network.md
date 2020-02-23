@@ -34,10 +34,10 @@
 ## Data-rate Units
 
 Speed:  
-**1kb/s** = $10^3$b/s  
-1Mb/s = $10^3$kb/s = $10^6$b/s  
-1Gb/s = $10^3$Mb/s = $10^6$kb/s = $10^9$b/s  
-1Tb/s = $10^3$Gb/s = $10^6$Mb/s = $10^9$kb/s = 10<sup>12</sup>b/s 
+**1kb/s** = 10<sup>3</sup>b/s  
+1Mb/s = 10<sup>3</sup>kb/s = 10<sup>6</sup>b/s  
+1Gb/s = 10<sup>3</sup>Mb/s = 10<sup>6</sup>kb/s = 10<sup>9</sup>b/s  
+1Tb/s = 10<sup>3</sup>Gb/s = 10<sup>6</sup>Mb/s = 10<sup>9</sup>kb/s = 10<sup>12</sup>b/s 
 
 Memory:  
 **1KB** = 1024B = 1024 * 8b   
