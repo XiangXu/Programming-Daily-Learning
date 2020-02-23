@@ -48,7 +48,7 @@ Memory:
 
 ## OSI and TCP/IP Model
 
-Read: https://www.zhihu.com/question/19918493
+Read: https://zhuanlan.zhihu.com/p/105060370
 
 ### OSI Model
 
