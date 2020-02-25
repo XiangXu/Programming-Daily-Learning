@@ -29,6 +29,14 @@ tags, after being created, have no further history of commits.
 
 **git tag -a v1.4**: create annotated tags.
 
+e.g. push tag v1.1.0 with msg 
+```
+git tag -d v1.1.0
+git tag -a v1.1.0 -m "my car and my ads"
+git push origin :v1.1.0
+git push origin v1.1.0
+```
+
 Git supports two different types of tags, annotated and lightweight tags. Lightweight tags and Annotated tags differ in the amount of accompanying meta data they store. A best practice is to consider Anomated tags as public, and Lightweight tags are private. Anomated tags store extra meta data such as: the tagger name, email, and date. Lightweight tags are essentially "bookmarks" to a commit, they are just a name and a pointer to commit, useful for creating quick links to relevant commits. 
 
 Reference: 
