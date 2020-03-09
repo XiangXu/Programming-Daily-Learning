@@ -25,6 +25,7 @@ git pop
 **Delete local branch**  
 ```
 git branch -d <local-branchname>
+git push origin --delete <local-branchname>
 ```
 
 **Delete remote branch**  
