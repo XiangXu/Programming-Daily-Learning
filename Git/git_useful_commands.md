@@ -22,15 +22,11 @@ git stash
 git pop
 ```
 
-**Delete local branch**  
-```
-git branch -d <local-branchname>
-git push origin --delete <local-branchname>
-```
 
-**Delete remote branch**  
+**Create and checkout to a new branch**  
 ```
-git push origin :<remote-branchname>
+git checkout -b <branch-name>
+git push origin <branch-name>
 ```
 
 **How to rename a branch name**  
@@ -38,9 +34,10 @@ git push origin :<remote-branchname>
 git branch -m <new-branchname>
 ```
 
-**Create and checkout to a new branch**  
+**Delete local branch**  
 ```
-git checkout -b <branch-name>
+git branch -d <local-branchname>
+git push origin --delete <local-branchname>
 ```
 
 **Checkout**  
