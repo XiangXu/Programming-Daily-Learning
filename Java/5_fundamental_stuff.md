@@ -159,6 +159,97 @@ while (i.hasNext()) {
    i.remove();
 }
 ```
+### Implement Stack
+```java
+import java.lang.IllegalArgumentException;
+import java.util.Arrays;
+
+class MyStack{
+    private int[] storage;
+    private int capacity;
+    private int count;
+    private static final int GROW_FACTORY = 2;
+
+    public MyStack()
+    {
+        this.capacity = 8;
+        this.storage = new int [8];
+        this.count = 0;
+    }
+
+    public MyStack(int initialCapacity)
+    {
+        if(initialCapacity < 1)
+            throw new IllegalArgumentException("Capacity too small");
+
+        this.capacity = initialCapacity;
+        this.storage = new int[initialCapacity];
+        this.count = 0;
+    }
+
+    private void ensureCapacity(){
+        int newCapacity = capacity * GROW_FACTORY;
+        storage = Arrays.copyOf(storage, newCapacity);
+        capacity = newCapacity;
+    }
+
+    public void push(int value)
+    {
+        if(count == capacity)
+            ensureCapacity();
+
+        storage[count++] = value;
+    }
+
+    public int pop()
+    {
+        if(count == 0)
+            throw new IllegalArgumentException("Stack is empty");
+        count --;
+        return storage[count];
+    }
+
+    public int peek()
+    {
+        if(count == 0)
+            throw new IllegalArgumentException("Stack is empty");
+        else
+            return storage[count--];
+    }
+
+    public boolean isEmpty()
+    {
+        return count == 0;
+    }
+
+    public int size()
+    {
+        return count;
+    }
+}
+
+public class TestStack{
+     public static void main(String []args)
+     {
+        MyStack myStack = new MyStack(3);
+        myStack.push(1);
+        myStack.push(2);
+        myStack.push(3);
+        myStack.push(4);
+        myStack.push(5);
+        myStack.push(6);
+        myStack.push(7);
+        myStack.push(8);
+        System.out.println(myStack.peek());//8
+        System.out.println(myStack.size());//8
+        for (int i = 0; i < 8; i++) {
+            System.out.println(myStack.pop());
+        }
+        System.out.println(myStack.isEmpty());//true
+        myStack.pop();//报错：java.lang.IllegalArgumentException: Stack is empty.
+     }
+}
+```
 
 
 
