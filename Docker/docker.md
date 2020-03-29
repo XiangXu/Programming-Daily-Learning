@@ -53,5 +53,7 @@ A docker registry stroes Docker images. Docker hub is a public registry that any
 
 When you use the **docker pull** or **docker run** commands, the required images are pulled from your configured registry. When you use the **docker push** command, your image is pushed to configurd registry. 
 
+Reference: 
 
+https://docs.docker.com/engine/docker-overview/
  
