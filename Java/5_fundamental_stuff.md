@@ -1,34 +1,5 @@
 # Java Fundamental Stuff
 
-### How to use equal() method correctly?
-```java
-String str = null;
-if (str.equals("SnailClimb")) {
-  ...
-} else {
-  ..
-}
-```
-
-Code above will throw NullPointExeception. If we update code like below, code should work correctly.
-
-```java
-"SnailClimb".equals(str);// false 
-```
-
-However, we would recommend to use **java.util.Objects#equals** 
-```java
-Objects.equals(null,"SnailClimb");// false
-```
-
-Here is the source code: 
-```java
-public static boolean equals(Object a, Object b) {
-        return (a == b) || (a != null && a.equals(b));
-    }
-```
-
-
 ## final, finally and finalize 
 
 ### final
@@ -39,11 +10,9 @@ public static boolean equals(Object a, Object b) {
 
 **final with method**: The method cannot be overriden by a subclass.
 
-
 ### finally
 
 The finally keyword is used in association with try/catch block and guarantees that a section of code will be executed, even if an exception is thrown. The finally block will be executed after the try and catch blocks.
-
 
 ### finalize
 
@@ -102,7 +71,41 @@ class RR {
 ```
 
 
-### BigDecimal
+## ArrayList vs LinkedList
+
+ArrayList and LinkedList both implement List interface and maintain insertion order. Both are non synchronized classes. 
+
+**Differences**:
+
+|  ArrayList |  LinkedList  |
+|---|---|
+| ArrayList internally uses a dynamic array to store elements. |  LinkedList internally uses a doubly linked list to store the elements.   |
+| Manipulation with ArrayList is slow because it internally uses an array. If any element is removed from the array, all the bits are shifted in memory. |  Manipulation with LinkedList is faster than ArrayList because it uses a doubly linked list, so no bit shifting is required in memory.  |
+| An ArrayList class can act as a list only because it implements List only. |  LinkedList class can act as a list and queue both because it implements List and Deque interfaces. |
+| ArrayList is **better for storing and accessing data**. |  LinkedList is **better for manipulating data**. |
+
+
+## HashMap vs TreeMap vs LinkedHashMap
+
+**HashMap** is implemented as a hash table, and there is no ordering on keys or values.
+
+**TreeMap** is implemented based on red-black tree structure, and it is ordered by the key.
+
+**LinkedHashMap** preverses the insertion order. 
+
+
+## HashSet vs TreeSet vs LinkedHashSet
+
+**HashSet** implements set interface, underlying data structure for HashSet is hashtable. Duplicate values are not allowed. 
+
+**TreeSet** is implemented based on red-black tree structure, and it is ordered by the value.
+
+**LinkedHashSet** preverses the insertion order. 
+
+
+
+
+## BigDecimal
 
 The BigDecimal class provides operations on double numbers for arithmetic, scale handling, rounding, comparison, format conversion and hashing. It can handle very large and very small floating point numbers with great precision but compensating with the time complexity a bit.
 
@@ -141,7 +144,7 @@ System.out.println(n);// 1.255
 In order to prevent precision loss, we would recommend to use **BigDecimal(String)**. 
 
 
-### Arrays.asList()
+###Arrays.asList()
 
 Convert array into list: 
 ```java
@@ -337,3 +340,5 @@ https://stackoverflow.com/questions/16748030/difference-between-arrays-aslistarr
 https://stackoverflow.com/questions/20308285/difference-between-collection-toarray-and-collection-toarrayobject-obj
 
 https://www.geeksforgeeks.org/g-fact-24-finalfinally-and-finalize-in-java/
+
+https://www.geeksforgeeks.org/arraylist-vs-linkedlist-java/
