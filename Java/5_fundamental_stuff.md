@@ -29,6 +29,79 @@ public static boolean equals(Object a, Object b) {
 ```
 
 
+## final, finally and finalize 
+
+### final
+
+**final with variable**: The value of variable cannot be changed once initialized.
+
+**final with class**: The class cannot be subclassed.
+
+**final with method**: The method cannot be overriden by a subclass.
+
+
+### finally
+
+The finally keyword is used in association with try/catch block and guarantees that a section of code will be executed, even if an exception is thrown. The finally block will be executed after the try and catch blocks.
+
+
+### finalize
+
+That is a method that the **Garbage Collector** always call just before the deletion/destorying the object which is eligible for Garbage Collection, so as to perform clean-up activity.
+
+```java
+class Hi { 
+    public static void main(String[] args) 
+    { 
+        Hi j = new Hi(); 
+  
+        // Calling finalize method Explicitly. 
+        j.finalize(); 
+  
+        j = null; 
+  
+        // Requesting JVM to call Garbage Collector method 
+        System.gc(); 
+        System.out.println("Main Completes"); 
+    } 
+  
+    // Here overriding finalize method 
+    public void finalize() 
+    { 
+        System.out.println("finalize method overriden"); 
+        System.out.println(10 / 0); 
+    } 
+} 
+
+//exception in thread "main" java.lang.ArithmeticException:
+//by zero followed by stack trace.
+
+
+class RR { 
+    public static void main(String[] args) 
+    { 
+        RR q = new RR(); 
+        q = null; 
+  
+        // Requesting JVM to call Garbage Collector method 
+        System.gc(); 
+        System.out.println("Main Completes"); 
+    } 
+  
+    // Here overriding finalize method 
+    public void finalize() 
+    { 
+        System.out.println("finalize method overriden"); 
+        System.out.println(10 / 0); 
+    } 
+} 
+
+//finalize method overriden
+//Main Completes
+
+```
+
+
 ### BigDecimal
 
 The BigDecimal class provides operations on double numbers for arithmetic, scale handling, rounding, comparison, format conversion and hashing. It can handle very large and very small floating point numbers with great precision but compensating with the time complexity a bit.
@@ -262,3 +335,5 @@ https://www.geeksforgeeks.org/bigdecimal-class-java/
 https://stackoverflow.com/questions/16748030/difference-between-arrays-aslistarray-and-new-arraylistintegerarrays-aslist
 
 https://stackoverflow.com/questions/20308285/difference-between-collection-toarray-and-collection-toarrayobject-obj
+
+https://www.geeksforgeeks.org/g-fact-24-finalfinally-and-finalize-in-java/
