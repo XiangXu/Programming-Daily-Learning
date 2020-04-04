@@ -131,3 +131,5 @@ Reference:
 
 https://stackify.com/oops-concepts-in-java/
 
+https://stackify.com/solid-design-principles/
+
