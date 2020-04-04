@@ -385,7 +385,7 @@ When a thread wants to execute synchronized statements inside the synchronized b
 
 In this way, synchronized keyword guarantees that only one thread will be executing the synchronized block statements at a time, and thus prevent multiple threads from corrupting the shared data inside the block.
 
-Keep in mind that if a thread is put on sleep (using sleep() method) then it does not release the lock. At this sleeping time, no thread will be executing the synchronized block statements.
+**Keep in mind that if a thread is put on sleep (using sleep() method) then it does not release the lock**. At this sleeping time, no thread will be executing the synchronized block statements.
 
 Java synchronization will throw NullPointerException if lock object used in 'synchronized (lock)' is null.
 
@@ -533,9 +533,9 @@ public class DemoClass
 
 #### wait(), notify() and notifyAll() 
 
-    ##### wait()
+##### wait()
 
-It tells the calling method to give up the lock and go to sleep until some other thread enters the same monitor and calls *notify()*. The *wait()* method releases the lock prior to waiting and reacquires the lock prior to returning from the *wait()* method. The *wait()* method is actually tightly integrated with the synchronization lock, using the feature not available directly from the synchronization mechanism.
+It tells the calling method to give up the lock and go to sleep until some other thread enters the same monitor and calls *notify()*. **The wait() method releases the lock prior to waiting and reacquires the lock prior to returning from the wait() method**. The *wait()* method is actually tightly integrated with the synchronization lock, using the feature not available directly from the synchronization mechanism.
 ```java
 synchronized( lockObject )
 { 
