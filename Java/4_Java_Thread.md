@@ -360,6 +360,10 @@ There are 3 parameters for a CSA operation:
 2. Old value A which was read by thread last time.
 3. New value B which should be written over V.
 
+Exmaple: java.util.concurrent.*
+
+https://www.jianshu.com/p/21be831e851e
+
 
 ### Java synchronized keyword
 
