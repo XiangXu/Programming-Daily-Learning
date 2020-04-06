@@ -91,7 +91,6 @@ Execution Engine execute the .class. It reads the byte-code line by line, use da
 
 It is an interface which interacts with the Native Method Libraries and provides the native libraries(C, C++) required for the execution. It enables JVM to call C/C++ libraries and to be called by C/C++ libraries which may be specific to hardware.
 
-## Native Method Libraries :
 It is a collection of the Native Libraries(C, C++) which are required by the Execution Engine.
 
 
