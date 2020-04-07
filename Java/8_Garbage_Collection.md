@@ -65,6 +65,62 @@ The **Permanent generation** contains metadata required by the JVM to describe t
 Classes may get collected (unloaded) if the JVM finds they are no longer needed and space may be needed for other classes. the perment generation is included in full garbage collection.
 
 
+## The generational Garbage Collection Process
+
+Now that you understand why the heap is separted into different generations. It is time to look at how exactly these spaces interact. The pictures that follow walks through the object allocation and aging process in the JVM.
+
+1. First, any objects are allocated to the eden space. Both survivor spaces start out empty. 
+
+![alt text][First]
+
+[First]: https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/images/gcslides/Slide13.png
+
+2. When the eden space fills up, a minor garbage collection is triggered.
+
+![alt text][Second]
+
+[Second]: https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/images/gcslides/Slide13.png
+
+3. Referenced objects are moved to the first survivor space. Unreferenced objects are deleted when the eden space is cleared.
+
+![alt text][Third]
+
+[Third]: https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/images/gcslides/Slide6.png
+
+4. At the next time minor GC, the same thing happens for the eden space. Unreferenced objects are deleted and referenced objects are moved to a survivor space. However, in this case, they are moved to the second survivor space(s1). In addition, objects from the last minor GC on the first survivor space(s0) have their age incremented and get moved to S1. Once all surviving objects have been moved to S1, both S0 and eden are cleared. Notice we now have differently aged object in the survivor space.
+
+![alt text][Fourth]
+
+[Fourth]: https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/images/gcslides/Slide8.png
+
+5. At the next minor GC, the same process repeats. However this time the survivor spaces switch. Referenced objects are moved to S0. Surviving objects are aged. Eden and S1 are cleared.
+
+![alt text][Fifth]
+
+[Fifth]: https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/images/gcslides/Slide9.png
+
+
+6. This slide demonstrates promotion. After a minor GC, when aged objects reach a certain age threshold(8 in this example) they promoted from young generatino to old generation.
+
+![alt text][Sixth]
+
+[Sixth]: https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/images/gcslides/Slide7.png
+
+7. As minor GCs continue to occure objects will continue to be promoted to the old generation sapce.
+
+![alt text][Seventh]
+
+[Seventh]: https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/images/gcslides/Slide10.png
+
+8. So that pretty much convers the entire process with the young generation. Eventually, a major GC will be performed on the old generation which cleans up and compacts that space.
+
+![alt text][Eighth]
+
+[Sixth]: https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/images/gcslides/Slide11.png
+
+
+
+
 Reference:
 
 https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/index.html
