@@ -116,7 +116,7 @@ Now that you understand why the heap is separted into different generations. It 
 
 ![alt text][Eighth]
 
-[Sixth]: https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/images/gcslides/Slide11.png
+[Eighth]: https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/images/gcslides/Slide11.png
 
 
 
