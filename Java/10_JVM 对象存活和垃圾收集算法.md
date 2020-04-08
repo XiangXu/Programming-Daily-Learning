@@ -139,4 +139,8 @@
 
 针对 **老年代** 存活率高、没有额外空间进行分配担保的特点，则采用 标记-清理 或 标记-整理 的算法。
 
+Reference:
+
+https://dyfloveslife.github.io/2019/11/20/object-survival-and-gc-algorithm/
+
 
