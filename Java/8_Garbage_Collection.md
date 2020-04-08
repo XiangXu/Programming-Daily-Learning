@@ -48,7 +48,7 @@ The **Young Generation** is where all new objects are allocated and aged. When t
 
 The **Old Generation** is used to store long surviving objects. Typically, a threshold(门槛) is set for young generation object and when that age is met, the object gets moved to the old generation. Eventually the old generation needs to be collected. This event is called a **major garbage collection**.
 
-Major garbage collection are also Stop the World events. Ofen a major collection is much slower because it involves all live objects. So for responsive applications, major garbage collections should be minimied. Also note, that the length of the Stop the World event for a major garbage collection is affected by the kind of garbage collector is used for the old generation space. 
+Major garbage collection are also Stop the World events. Often a major collection is much slower because it involves all live objects. So for responsive applications, major garbage collections should be minimied. Also note, that the length of the Stop the World event for a major garbage collection is affected by the kind of garbage collector is used for the old generation space. 
 
 The **Permanent generation** contains metadata required by the JVM to describe the classes and methods used in application. The permanent generation is populated by the JVM at runtime based on classes in use by the application. In addition, Java SE library classes and methods may be stored here.
 
@@ -63,37 +63,68 @@ Now that you understand why the heap is separted into different generations. It 
 
 ![First](/Java/images/garbage_collection/Slide13.png)
 
-1. When the eden space fills up, a minor garbage collection is triggered.
+2. When the eden space fills up, a minor garbage collection is triggered.
 
 ![Second](/Java/images/garbage_collection/Slide14.png)
 
-1. Referenced objects are moved to the first survivor space. Unreferenced objects are deleted when the eden space is cleared.
+3. Referenced objects are moved to the first survivor space. Unreferenced objects are deleted when the eden space is cleared.
 
 ![Third](/Java/images/garbage_collection/Slide6.png)
 
-1. At the next time minor GC, the same thing happens for the eden space. Unreferenced objects are deleted and referenced objects are moved to a survivor space. However, in this case, they are moved to the second survivor space(s1). In addition, objects from the last minor GC on the first survivor space(s0) have their age incremented and get moved to S1. Once all surviving objects have been moved to S1, both S0 and eden are cleared. Notice we now have differently aged object in the survivor space.
+4. At the next time minor GC, the same thing happens for the eden space. Unreferenced objects are deleted and referenced objects are moved to a survivor space. However, in this case, they are moved to the second survivor space(s1). In addition, objects from the last minor GC on the first survivor space(s0) have their age incremented and get moved to S1. Once all surviving objects have been moved to S1, both S0 and eden are cleared. Notice we now have differently aged object in the survivor space.
 
 ![Fourth](/Java/images/garbage_collection/Slide8.png)
 
-1. At the next minor GC, the same process repeats. However this time the survivor spaces switch. Referenced objects are moved to S0. Surviving objects are aged. Eden and S1 are cleared.
+5. At the next minor GC, the same process repeats. However this time the survivor spaces switch. Referenced objects are moved to S0. Surviving objects are aged. Eden and S1 are cleared.
 
 ![Fifth](/Java/images/garbage_collection/Slide9.png)
 
 
-1. This slide demonstrates promotion. After a minor GC, when aged objects reach a certain age threshold(8 in this example) they promoted from young generatino to old generation.
+6. This slide demonstrates promotion. After a minor GC, when aged objects reach a certain age threshold(8 in this example) they promoted from young generatino to old generation.
 
 ![Sixth](/Java/images/garbage_collection/Slide7.png)
 
-1. As minor GCs continue to occure objects will continue to be promoted to the old generation sapce.
+7. As minor GCs continue to occure objects will continue to be promoted to the old generation sapce.
 
 ![Seventh](/Java/images/garbage_collection/Slide10.png)
 
-1. So that pretty much convers the entire process with the young generation. Eventually, a major GC will be performed on the old generation which cleans up and compacts that space.
+8. So that pretty much convers the entire process with the young generation. Eventually, a major GC will be performed on the old generation which cleans up and compacts that space.
 
 ![Eighth](/Java/images/garbage_collection/Slide11.png)
 
 
 
+## PermGen vs Metaspace
+
+### PermGen
+
+**PermGen is a special heap space seperated from the main memory heap**.
+
+The JVM keeps track of loaded class metadata in the PermGen. Additionally, the JVM stores all the static content in this memory section. This includes all the static methods, primitive variables, and references to the static objects.
+
+Furthermore, it contains data about byte code, names and JIT information. Before Java 7, the **String Pool was also part of this memory**. The disadvantages of the fixed pool size: the JVM placed the Java String Pool in the PermGen space, which has a fixed size — it can't be expanded at runtime and is not eligible for garbage collection.
+
+The default maximum memory size for 32-bit JVM is 64 MB and 82 MB for the 64-bit version.
+
+However, we can change the default size with the JVM options:
+
+-XX:PermSize=[size] is the initial or minimum size of the PermGen space
+-XX:MaxPermSize=[size] is the maximum size
+
+With its limited memory size, PermGen is involved in generating the famous OutOfMemoryError. Simply put, the class loaders aren't garbage collected properly and, as a result, generated a memory leak.
+
+### Metaspace
+
+From Java 8 version, Metaspace has been implemented to replace the older PermGen meemory space. **This native memory region grows automatically by default**.
+
+* MetaspaceSize and MaxMetaspaceSize – we can set the Metaspace upper bounds.
+  
+* MinMetaspaceFreeRatio – is the minimum percentage of class metadata capacity free after garbage collection.
+
+* MaxMetaspaceFreeRatio – is the maximum percentage of class metadata capacity free after a garbage collection to avoid a reduction in the amount of space.
+
 Reference:
 
 https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/index.html
+
+https://www.baeldung.com/java-permgen-metaspace
