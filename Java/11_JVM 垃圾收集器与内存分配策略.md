@@ -32,9 +32,9 @@ ParNew 收集器是运行在 Server 模式下的虚拟机中首选的新生代�
 
 **Parallel Scavenge 收集器** 是一个采用 **复制算法** 的 **并行多线程**的新生代收集器。它和 ParNew 都是一样多线程，独占式的收集器。但是 **Parallel Scavenge 收集器** 有一个重要的特点: **它非常关注系统的吞吐量**， 因此它也经常被称为 **吞吐量优先** 收集器。
 
-···
+```
 吞吐量 = CPU 运行用户代码的时间 / (CPU 运行用户代码的时间 + 垃圾收集时间)
-···
+```
 
 ![Parallel Scavenge](https://i.loli.net/2019/11/22/c7fQj2nX6rix1qW.png)
 
