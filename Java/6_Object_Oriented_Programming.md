@@ -80,9 +80,9 @@ class Main {
 
 ## Association vs Aggregation vs Composition
 
-1. **Association** follows many-to-many relationships.
-2. **Aggregation** follows a one-to-one relationship.
-3. **Composition** follows a one-to-many relationship.
+1. **Association** 当一个类知道另一个类。
+2. **Aggregation** 弱的拥有，体现的是A对象可以包含B对象，但B对象不是A对象的一部分。
+3. **Composition** 强的拥有，体现的是严格的部分和整体的关系，部分和整体的生命周期一样。
 
 ![alt text][engine]
 
