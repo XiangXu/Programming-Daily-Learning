@@ -32,7 +32,7 @@ The **isolation** aspect of the ACID model mainly involves InnoDB transations. I
 * The low-level details of InnoDB locking.
 
 
- ### Durability
+### Durability
 
 The **durability** aspect of the ACID model involves MySQL software features interacting with your particular hardware configuration. Because of the many possibilities depending on the capabilities of your CPU, network, and storage devices, this aspect is the most complicated to provide concrete guidelines for.
 

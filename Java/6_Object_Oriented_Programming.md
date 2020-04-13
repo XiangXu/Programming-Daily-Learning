@@ -108,7 +108,7 @@ class Main {
 
 ### Interface Segregation(隔离) Principle 
 
-**Client should not be forced to implement unnecessary methods whih they will not use**.
+**Client should not be forced to implement unnecessary methods if they will not use**.
 
 
 ### Dependency Inversion Principle 
