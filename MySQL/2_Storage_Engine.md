@@ -4,7 +4,7 @@ Storage Engine are MySQL components, that can handle the SQL operations for diff
 
 ## InnoDB
 
-This is the default storage engine for MySQL 5.5 and higher. It provides **transaction-safe** (ACID compliant) tables, supports **FOREIGN KEY** referential-integrity constraints. It supports commit, rollback, and crash-recovery capabilities to protect data. It also supports **row-level locking**. It's 'consistent nolocking reads' increases performance when used in a multiuser environment. It stores data in clustered indexes which reduce I/O queries based on primary keys. 
+This is the default storage engine for MySQL 5.5 and higher. It provides **transaction-safe** (ACID compliant) tables, supports **FOREIGN KEY** referential-integrity constraints. **It supports commit, rollback, and crash-recovery capabilities to protect data.** It also supports **row-level locking**. It's 'consistent nolocking reads' increases performance when used in a multiuser environment. It stores data in clustered indexes which reduce I/O queries based on primary keys. 
 
 ## MyISAM
 
