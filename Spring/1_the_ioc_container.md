@@ -207,6 +207,14 @@ public class DefaultServiceLocator {
 
 ## Dependencies
 
+### Dependency Injection
+
+Coder is cleaner with the DI principle, and decoupling is more effective when objects are provided with their dependencies. The object doesn't look up its dependencies and does not know the location or class of the dependencies. As a result, your classes become easier to test, particularly when the dependencies are on interfaces or abstract base classes, which allow for stub or mock implementations to be used in unit tests.
+
+
+Reference:
+
+https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.htm
 
 
 
