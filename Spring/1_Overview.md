@@ -12,6 +12,8 @@
 
 * **Spring's web framework is a well-designed web MVC framework,** which provides a great alternative to web framework such as Structs or other over-engineered or less popular web framework.
 
+* **Spring provides a convenient API to translate technology-specific exceptions (thrown by JDBC, Hibernate, or JDO) into consistent, unchecked exceptions.** 
+
 * **Lightweight IoC containers tend to be lightweight, especially when compared with EJB containers.** This is beneficial for developing and deploying applications on computers with limited memory and CPU resources
 
 * **Spring provides a consistent transaction management interface that can scale down to a local transaction (using a single database, for example) and scale up to global transactions (using JTA, for example).**
