@@ -28,14 +28,14 @@ The Data Access / Integration layer consists of the JDBC, ORM, OXM, JMS and Tran
 
 * The **Web-Socket** module provides support for WebSocket-based, two-way communication between the client and the server in web applications.
 
-*The **Web-Portle(门户组件)** module provides the MVC implemention to be used in portle environment and mirrors the functionality of Web-Servlet module.
+* The **Web-Portle(门户组件)** module provides the MVC implemention to be used in portle environment and mirrors the functionality of Web-Servlet module.
 
 
 ## Miscellaneous
 
 * The **AOP** module provides an aspect-oriented programming implemention allowing you to define method-interceptors(拦截器) and pointcuts to clean decouple code that implements functionality that should be seperated.
 
-* The **Aspects** module provdes the integration with AspectJ, which is again a powerful and mature AOP framework.
+* The **Aspects** module provides the integration with AspectJ, which is again a powerful and mature AOP framework.
 
 * The **Instrumentation(仪器)** module provides class instrumentation support and class loader implementations to be used in certain application services.
 
