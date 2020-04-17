@@ -22,7 +22,7 @@
 
 **NFS(Network File System)**: it allows a user on a client computer to access files over a computer network much like local storage is accessed. 
 
-**SNMP(Simple Network Management Protocol)****: it is an Internet Standard protocol for collecting and organizing information about managed devices on IP network and for modifying that information to change device behavior. 
+**SNMP(Simple Network Management Protocol)**: it is an Internet Standard protocol for collecting and organizing information about managed devices on IP network and for modifying that information to change device behavior. 
 
 **HTTP(Hypertext Transfer Protocol)**: it is a protocol that allows communication between different systems. WWW is about coummunicaiton between web clients and services. Communication between client computers and web server is done by sending HTTP Requests and receving HTTP Response. 
 
@@ -116,7 +116,7 @@ Same like transport layer of the OSI model.
 
 ### Internet Layer
 
-Samoe like network layer of the OSI model
+Same like network layer of the OSI model
 
 ### Network Access Layer
 
@@ -177,6 +177,8 @@ After the client receives the acknowledgment, it checks whether ack is J+1, whet
 3. ACK=1, seq=x+1, ack=y+1
 
 
+![Three-way](https://user-gold-cdn.xitu.io/2019/10/8/16da9fd28a45bd19?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+
 ### Four-way handshake 
 
 The so-called Four-Way Wavehand terminates the TCP connection.
@@ -193,6 +195,8 @@ The so-called Four-Way Wavehand terminates the TCP connection.
 2. ACK=1, seq=v, ack=u+1
 3. FIN=1, ACK=1, seq=w, ack=u+1
 4. ACK=1, seq=u+1, ack=w+1
+
+![Four-way](https://user-gold-cdn.xitu.io/2019/10/8/16da9fd28b49f652?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 
 Reference:
