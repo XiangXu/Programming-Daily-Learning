@@ -190,6 +190,69 @@ A **Daemon thread** is intended to provide a general service in the background a
 thread.setDaemon(true); // must be called before start()
 ```
 
+It is possible to customize the attributes of threads created by **Executors**
+
+**If**
+
+```java
+public class DaemonThreadFactory implements ThreadFactory
+{
+    @Override
+    public Thread newThread(Runnable r)
+    {
+        Thread thread = new Thread(r);
+        thread.setDaemon(true);
+        return thread;
+    }
+}
+
+public class DaemonThreadPoolExecutor extends ThreadPoolExecutor
+{
+    public DaemonThreadPoolExecutor()
+    {
+        super(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS,
+                                                                new SynchronousQueue<>(),
+                                                                new DaemonThreadFactory());
+    }
+}
+
+public class DaemonFromFactory implements Runnable
+{
+    @Override
+    public void run()
+    {
+        try
+        {
+            while(true)
+            {
+                TimeUnit.MILLISECONDS.sleep(100);
+                System.out.println(Thread.currentThread() + " " + this);
+            }
+        }
+        catch (InterruptedException e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        // ExecutorService executorService = Executors.newCachedThreadPool(new DaemonThreadFactory());
+        ExecutorService executorService = new DaemonThreadPoolExecutor();
+        for(int i=0; i<10; i++)
+        {
+            executorService.execute(new DaemonFromFactory());
+        }
+
+        System.out.println("All daemons started");
+        TimeUnit.MILLISECONDS.sleep(500);
+    }
+}
+```
+
+**If a thread is a daemon, then any threads it creates will automatically be daemons.**
+
+**You should be aware that daemon threads will terminates their run() methods without executing finally caluses.**
+
 
 
 
