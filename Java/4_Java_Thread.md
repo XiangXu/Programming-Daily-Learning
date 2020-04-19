@@ -192,8 +192,6 @@ thread.setDaemon(true); // must be called before start()
 
 It is possible to customize the attributes of threads created by **Executors**
 
-**If**
-
 ```java
 public class DaemonThreadFactory implements ThreadFactory
 {
