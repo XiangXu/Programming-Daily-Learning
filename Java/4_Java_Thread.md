@@ -95,11 +95,100 @@ The call to **shutdown()** prevents new tasks from being submitted to that **Exe
 
 **SingleThreadExecutor ensures that only one task at a time is running.** so you don't need to deal with synchronizing on the shared resource. 
 
+### Producing return values from tasks
 
+The **Callable** interface is a generic with a type of parameter representing the return value from the method **call()** and must be invoked using an **ExecutorService submit()** method.
 
+```java
+package ThreadStudy.CallableExample;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
 
+class TaskWithResult implements Callable<String>
+{
+    private int id;
+    public TaskWithResult(int id)
+    {
+        this.id = id;
+    }
 
+    @Override
+    public String call() throws Exception
+    {
+        return "Result of TaskWithResult " + id;
+    }
+}
+
+public class CallableDemo
+{
+    public static void main(String[] args)
+    {
+        ExecutorService exec = Executors.newCachedThreadPool();
+        List<Future<String>> results = new ArrayList<>();
+
+        for(int i=0; i<10; i++)
+            results.add(exec.submit(new TaskWithResult(i)));
+
+        for (Future<String> fs : results)
+        {
+            try
+            {
+                System.out.println(fs.get());
+            }
+            catch (InterruptedException | ExecutionException e)
+            {
+                System.out.println(e);
+            }
+            finally {
+                exec.shutdown();
+            }
+        }
+    }
+}
+```
+
+You can query the **Future** with **isDone()** to see if it has completed.
+
+### Sleeping
+
+```java
+    @Override
+    public void run()
+    {
+        while(countDown-- > 0)
+        {
+            System.out.println(status());
+//            Thread.sleep(100);
+            try {
+                TimeUnit.MILLISECONDS.sleep(100);
+            } catch (InterruptedException e) {
+                System.out.println("Interrupted");
+            }
+        }
+    }
+```
+
+The call to **sleep()** can throw an **InterruptedException**. 
+
+**TimeUnit** provides better readability by allowing you to specify the units of the **sleep()** delay.
+
+### Priority
+
+The **priority** convenys the importance of a thread to the scheduler. **getPriority() and setPriority()**
+
+### Yielding
+
+When you call **yield()**, you are suggesting that other threads of the same priority might be run. However, **you cannot rely on yield() for any serious control or tuning of your application.**
+
+### Daemon threads
+
+A **Daemon thread** is intended to provide a general service in the background as long as the program is running, but is not part of the essence of the program.
+
+```java
+thread.setDaemon(true); // must be called before start()
+```
 
 
 
