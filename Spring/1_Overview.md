@@ -1,5 +1,9 @@
 # Overview
 
+Reference:
+
+https://www.tutorialspoint.com/spring/
+
 ## Benefit of Using the Spring Framework
 
 * **Spring enables developer to develop enterprise-class application using POJOs(Plain Old Java Objects)**. The benefit of using POJOs is that you do not need an EJB container product such as application server but you have the option of using only a robust servlet container such as Tomcat or some commercial product. 
@@ -33,11 +37,5 @@ When writing a complex Java application, application classes should be as indepe
 The functions that span(横跨) multiple points of an application are called **cross-cutting concerns** and those cross-cutting concerns are conceptually seperate from application's business logic. 
 
 The key unit of modularity in OOP is the class, whereas in AOP the unit of modularity is the aspect. **DI helps you decouple your application objects from each other, while AOP helps you decouple cross-cutting concerns from the objects that they affect.**
-
-Reference:
-
-https://www.tutorialspoint.com/spring/spring_overview.htm
-
-
 
 
