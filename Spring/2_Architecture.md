@@ -9,7 +9,7 @@ The Spring Framework provdes about 20 modules which can be used based on applica
 
 The Data Access / Integration layer consists of the JDBC, ORM, OXM, JMS and Transaction modules.
 
-* The **DJBC(Java Database Connectivity)** module provides a JDBC-abstraction layer that removes the need for tedious JDBC related coding.
+* The **JDBC(Java Database Connectivity)** module provides a JDBC-abstraction layer that removes the need for tedious JDBC related coding.
 
 * The **ORM(Object Related Mapping)** module provides integration layers for popular object-relational mapping APIs, including JPA, JPO, Hibernate, and iBatis. 
 

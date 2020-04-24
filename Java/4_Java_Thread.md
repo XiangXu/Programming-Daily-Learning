@@ -170,6 +170,8 @@ You can query the **Future** with **isDone()** to see if it has completed.
     }
 ```
 
+**Causes the currently running thread to block for at least the specified number of milliseconds.**
+
 The call to **sleep()** can throw an **InterruptedException**. 
 
 **TimeUnit** provides better readability by allowing you to specify the units of the **sleep()** delay.
@@ -179,6 +181,8 @@ The call to **sleep()** can throw an **InterruptedException**.
 The **priority** convenys the importance of a thread to the scheduler. **getPriority() and setPriority()**
 
 ### Yielding
+
+**Causing the currently running thread to yield to any other threads of the same priority that are waiting to be scheduled.**
 
 When you call **yield()**, you are suggesting that other threads of the same priority might be run. However, **you cannot rely on yield() for any serious control or tuning of your application.**
 
@@ -208,9 +212,7 @@ public class DaemonThreadPoolExecutor extends ThreadPoolExecutor
 {
     public DaemonThreadPoolExecutor()
     {
-        super(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS,
-                                                                new SynchronousQueue<>(),
-                                                                new DaemonThreadFactory());
+        super(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue<>(), new DaemonThreadFactory());
     }
 }
 
@@ -251,6 +253,116 @@ public class DaemonFromFactory implements Runnable
 
 **You should be aware that daemon threads will terminates their run() methods without executing finally caluses.**
 
+### Joining a thread
+
+One thread may call **join()** on another thread to wait for the second thread to complete before proceeding. If a thread calls **t.join()** on another thread **t**, then the calling thread is suspended until the target thread **t** finishes. You may also call **join()** with a timeout argument.
+
+```java
+package fundamental.threadstudy;
+
+class BoyThread extends Thread
+{
+    @Override
+    public void run()
+    {
+        System.out.println("A boy and a girl are going to shopping together");
+
+        GirlThread girl = new GirlThread();
+        girl.start();
+
+        int time = 2000;
+        try
+        {
+            girl.join(time);
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+
+        System.out.println("Boy has been waiting for" + time + ", he went shopping alone.");
+    }
+}
+
+class GirlThread extends Thread
+{
+    @Override
+    public void run()
+    {
+        int time = 5000;
+
+        System.out.println("Girl start to makeup，boy is waiting.");
+
+        try
+        {
+            Thread.sleep(time);
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+
+        System.out.println("Girl finish makeup，cost：" + time);
+    }
+}
+
+public class ThreadJoinExample
+{
+    public static void main(String[] args)
+    {
+        BoyThread boyThread = new BoyThread();
+        boyThread.start();
+    }
+}
+```
+
+### Catching Execptions
+
+**Thread.UncaughtExceptionHandler** allows you to attach an exception handler to each **Thread** object. 
+
+**Thread.UnacughtExcetpionHandler.uncaughtException()** is automatically called when that thread is about die from an uncaught exception. To use it, we create a new type of **ThreadFactory** which attaches a new Thread.UncaughtExceptionHandler to each new Thread it creates. 
+
+```java
+public class ExceptionThread implements Runnable
+{
+    @Override
+    public void run()
+    {
+        throw new RuntimeException();
+    }
+}
+
+public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
+{
+    @Override
+    public void uncaughtException(Thread t, Throwable e)
+    {
+        System.out.println("Caught " + e);
+    }
+}
+
+public class HandlerThreadFactory implements ThreadFactory
+{
+    @Override
+    public Thread newThread(Runnable r)
+    {
+        Thread t = new Thread(r);
+        t.setUncaughtExceptionHandler(new UncaughtExceptionHandler());;
+        return t;
+    }
+}
+
+public class CaptureUncaughtExcetpion
+{
+    public static void main(String[] args)
+    {
+//      Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
+//      ExecutorService executorService = Executors.newCachedThreadPool();
+        ExecutorService executorService = Executors.newCachedThreadPool(new HandlerThreadFactory());
+        executorService.execute(new ExceptionThread());
+    }
+}
+```
 
 
 
