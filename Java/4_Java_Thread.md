@@ -7,8 +7,6 @@
 A thread drives a task, so you need a way to describe that tasks. This is provided by the **Runnable** interface.
 
 ```java
-package ThreadStudy;
-
 public class LiftOff implements Runnable
 {
     private static int taskCount = 0;
@@ -45,8 +43,6 @@ public class LiftOff implements Runnable
 The traditional way to trun a **Runnable** object into a working task is to hand it to a **Thread** constructor.
 
 ```java
-package ThreadStudy;
-
 public class LiftOffTest
 {
     public static void main(String[] args)
@@ -65,8 +61,6 @@ public class LiftOffTest
 **Executor** provide a layer of indirection(间接的) between a client and the execution of a task. It allows you to manage the execution of asynchronous tasks withouth having to explicitly manage the lifecycle of threads. **Executors are the preferred method for starting tasks in Java.**
 
 ```java
-package ThreadStudy;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -100,8 +94,6 @@ The call to **shutdown()** prevents new tasks from being submitted to that **Exe
 The **Callable** interface is a generic with a type of parameter representing the return value from the method **call()** and must be invoked using an **ExecutorService submit()** method.
 
 ```java
-package ThreadStudy.CallableExample;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -258,8 +250,6 @@ public class DaemonFromFactory implements Runnable
 One thread may call **join()** on another thread to wait for the second thread to complete before proceeding. If a thread calls **t.join()** on another thread **t**, then the calling thread is suspended until the target thread **t** finishes. You may also call **join()** with a timeout argument.
 
 ```java
-package fundamental.threadstudy;
-
 class BoyThread extends Thread
 {
     @Override
@@ -440,7 +430,6 @@ catch(InterruptedException e)
 {
     throw new RuntimeException(e);
 }
-
 ```
 
 
