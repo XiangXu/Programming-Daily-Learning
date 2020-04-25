@@ -364,6 +364,85 @@ public class CaptureUncaughtExcetpion
 }
 ```
 
+### synchronized
+
+When a task wishes to execute a piece of code guarded by the **synchronized** keyword, it checks to see if the lock is available, then acquires it, executes the code, and release it.
+
+All objects automatically contain a single lock(also refered to as a **monitor**). When you call any **synchronized** method, that object is locked and no other **synchronized** method of that object can be called until the first one finishes and releases the lock.
+
+**Note that it is especially important to make fields private when working iwth concurrency. other the synchronized keyword cannot prevent another task from accessing a field directly, and thus producing collision.**
+
+When should you synchronize?
+
+*If you are writing a variable that might next be read by another thread, or reading a variable that might have last been written by another thread, you must use synchronization, and further, both the reader and the writer must synchronize using the same monitor lock*.
+
+```java
+public class EventGenerator extends IntGenerator
+{
+    private int currentEventValue = 0;
+
+    @Override
+    public synchronized int next()
+    {
+        ++ currentEventValue;
+        Thread.yield();
+        ++ currentEventValue;
+        return currentEventValue;
+    }
+
+    public static void main(String[] args) {
+        EventChecker.test(new EventGenerator());
+    }
+}
+```
+### Using explicit Lock objects
+
+The **Lock** object must be explicitly created, locked and unlocked. It produces less elegant code than the build-in form. However, it is more flexible for solving certain types of problems. 
+
+```java
+public class MutexEvenGenerator extends IntGenerator
+{
+    private int currentEvenValue = 0;
+    private Lock lock = new ReentrantLock();
+
+    @Override
+    public int next()
+    {
+        lock.lock();
+        try
+        {
+            ++currentEvenValue;
+            Thread.yield();
+            ++currentEvenValue;
+            return  currentEvenValue;
+        }
+        finally {
+            lock.unlock();
+        }
+    }
+
+    public static void main(String[] args) {
+        EventChecker.test(new MutexEvenGenerator());
+    }
+}
+```
+
+In general, when you are using **synchronized**, there is less code to write, and the opportunity for user error is greatly reduced, so you will usually only use the explicit **Lock** objects when you are solving special problems.
+
+```java
+private ReentrantLock lock = new ReentrantLock();
+
+try
+{
+    boolean captured = lock.tryLock(2, TimeUnit,SECONDS);
+}
+catch(InterruptedException e)
+{
+    throw new RuntimeException(e);
+}
+
+```
+
 
 
 Reference:
