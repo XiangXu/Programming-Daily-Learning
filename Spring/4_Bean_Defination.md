@@ -12,3 +12,42 @@ Following are the three important methods to provide configuration metadata to t
 * Annotation-based configuration
 * Java-based configuration
 
+```java
+//@Component("helloWorld")
+public class HelloWorld implements InitializingBean, DisposableBean
+{
+    private String message;
+
+    public HelloWorld(String message)
+    {
+        this.message = message;
+    }
+
+    public void getMessage()
+    {
+        System.out.println("Your message: " + message);
+    }
+}
+
+@Configuration
+public class ModuleConfiguration
+{
+    @Bean
+    public HelloWorld helloWorld()
+    {
+        return new HelloWorld("Hello World");
+    }
+}
+
+@SpringBootApplication
+public class DemoApplication
+{
+	public static void main(String[] args)
+	{
+		ApplicationContext context = SpringApplication.run(DemoApplication.class, args);
+
+		HelloWorld helloWorld = (HelloWorld) context.getBean("helloWorld");
+		helloWorld.getMessage();
+	}
+}
+```

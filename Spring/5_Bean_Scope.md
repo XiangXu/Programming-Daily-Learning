@@ -2,7 +2,7 @@
 
 ### The Singleton Scope(Default)
 
-This scopes the bean definition to a single instance per Spring IoC container. T**his single instance is stored in a cache such single beans, and all subsequent requests and references for that named bean return the cached object.**
+This scopes the bean definition to a single instance per Spring IoC container. **This single instance is stored in a cache such single beans, and all subsequent requests and references for that named bean return the cached object.**
 
 ### The Prototype Scope
 

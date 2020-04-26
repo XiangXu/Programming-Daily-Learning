@@ -56,3 +56,32 @@ public class ExampleBean {
 ```
 
 **It is recommended that you do not use the InitializingBean or DisposableBean callbacks, because XML configuration gives much flexibility in terms of naming your method.**
+
+Example 
+```java
+@Component("helloWorld")
+public class HelloWorld implements InitializingBean, DisposableBean
+{
+    private String message;
+
+    public HelloWorld(String message)
+    {
+        this.message = message;
+    }
+
+    public void getMessage()
+    {
+        System.out.println("Your message: " + message);
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        System.out.println("Destory bean!!!!!!!!!!!!!!!!!!");
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("Create bean!!!!!!!!!!!!!!!!!!!!!!");
+    }
+}
+```
