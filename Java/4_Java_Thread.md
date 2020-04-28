@@ -360,7 +360,7 @@ When a task wishes to execute a piece of code guarded by the **synchronized** ke
 
 All objects automatically contain a single lock(also refered to as a **monitor**). When you call any **synchronized** method, that object is locked and no other **synchronized** method of that object can be called until the first one finishes and releases the lock.
 
-**Note that it is especially important to make fields private when working iwth concurrency. other the synchronized keyword cannot prevent another task from accessing a field directly, and thus producing collision.**
+**Note that it is especially important to make fields private when working with concurrency. other the synchronized keyword cannot prevent another task from accessing a field directly, and thus producing collision.**
 
 When should you synchronize?
 
@@ -431,6 +431,48 @@ catch(InterruptedException e)
     throw new RuntimeException(e);
 }
 ```
+
+### Atomicity and volatility
+
+*If you can write a high-performance JVM for a modern microprocessor, then you are qualified to think about wheter your can void synchronizing.*
+
+**Reading and writing primitive variables other than long and double is guaranteed to go to and from memory as indivisible(atomic) operations. You do get atomicity if you use the volatile keyword when defining a long or double variable.**
+
+An atomic operation on a non-volatile field will not necessarily be flushed to main memory, so another task that reads that field will not necessarily wee the new Value. If multiple tasks are accessing a field, that field should be **Volatile**; otherwise, the field should only be accessed via synchronization. **Synchronization** also causes flushing to main memory, so if a field is completely guarded by **synchronized** methods or blocks, it is not necessary to make it **volatile**.
+
+**volatile** doesn't work when the value of a field depends on its previous value, nor does it work on fields whose value are constrained by the values of other fields, such as the lower and upper bound of Range class which must obey the constraint lower <= upper.
+
+**It is typically only safe to use volatile instead of synchronized if the class has only one mutable field.**
+
+### Thread Local Storage
+
+A second way to prevent tasks from colliding(冲突) over shared resources is to eliminate the sharing of variables. **Thread Local Storage** is a mechanism that automatically creates different storage for the same variable, for each different thread that uses an object. 
+
+```java
+private static ThreadLocal<Integer> value = new ThreadLocal<Integer>()
+{
+    private Random rand = new Random(47);
+    protected synchronized Integer initialValue()
+    {
+        return rand.nextInt(10000);
+    }
+};
+
+public static void increment()
+{
+    value.set(value.get() + 1);
+}
+
+public static int get()
+{
+    return value.get();
+}
+```
+
+**ThreadLocal** objects are usually sotred as **static** fields. When you create a **ThreadLocal** object, you are only able to access the contents of the object using the **get()** and **set()** methods. The **get()** method returns a copy of the object that is associated with the thread, and **set()** inserts its argument into the object stored for that thread, returning the old object that was in storage. 
+
+
+
 
 
 
