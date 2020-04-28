@@ -79,7 +79,7 @@ public class LiftOffTest
 }
 ```
 
-The call to **shutdown()** prevents new tasks from being submitted to that **Executor**. The current thread will continue to run all tasks submitted before **shutdown()** was called. The program will exit as soon as all the taasks in the **Executor** finish.
+The call to **shutdown()** prevents new tasks from being submitted to that **Executor**. The current thread will continue to run all tasks submitted before **shutdown()** was called. The program will exit as soon as all the tweeasks in the **Executor** finish.
 
 **CachedThreadPool**: creates one thread per task. It will generally create as many threads as it needs during the execution of a program and then will stop creating new threads as it recycles the old ones.
 
@@ -438,7 +438,7 @@ catch(InterruptedException e)
 
 **Reading and writing primitive variables other than long and double is guaranteed to go to and from memory as indivisible(atomic) operations. You do get atomicity if you use the volatile keyword when defining a long or double variable.**
 
-An atomic operation on a non-volatile field will not necessarily be flushed to main memory, so another task that reads that field will not necessarily wee the new Value. If multiple tasks are accessing a field, that field should be **Volatile**; otherwise, the field should only be accessed via synchronization. **Synchronization** also causes flushing to main memory, so if a field is completely guarded by **synchronized** methods or blocks, it is not necessary to make it **volatile**.
+An atomic operation on a non-volatile field will not necessarily be flushed to main memory, so another task that reads that field will not necessarily see the new Value. If multiple tasks are accessing a field, that field should be **Volatile**; otherwise, the field should only be accessed via synchronization. **Synchronization** also causes flushing to main memory, so if a field is completely guarded by **synchronized** methods or blocks, it is not necessary to make it **volatile**.
 
 **volatile** doesn't work when the value of a field depends on its previous value, nor does it work on fields whose value are constrained by the values of other fields, such as the lower and upper bound of Range class which must obey the constraint lower <= upper.
 
@@ -471,6 +471,26 @@ public static int get()
 
 **ThreadLocal** objects are usually sotred as **static** fields. When you create a **ThreadLocal** object, you are only able to access the contents of the object using the **get()** and **set()** methods. The **get()** method returns a copy of the object that is associated with the thread, and **set()** inserts its argument into the object stored for that thread, returning the old object that was in storage. 
 
+
+### Thread States
+
+1. **New**: A thread remains in this state only momentarily, as it is being created. It allocates any necessary system resources and platforms initialization. At this point it becomes eligible to receive CPU time. The scheduler will then transition this thread to the runnable or blocked statel.
+   
+2. **Runnable**: This means that a thread can be run when the time-slicing mechanism has CPU cycles available for the thread. Thus, the thread minght or might not be running at any moment, but there is nothing to prevent it from being run if the scheduler can arrange it. That is, it is not dead or blocked.
+
+3. **Blocked**: The thread can be run, but something prevents it. While a thread is in the blocked state, the scheduler will simply skip it and not give it any CPU time. Until a thread reenters the runnable state, it won't perform any operations. 
+
+4. **Dead**: A thread in the dead or terminated state is no longer scheduleable and will not receive any CPU time. Its task is completed, and it is no longer runnable. One way for a task to die is by returning from its **run()** method, but a task's trhead can aslo be interrupted. 
+
+### Becoming blocked
+
+* You have put the task to sleep by calling **sleep(milliseconds)**, in which case it will not be run for the specified time.
+
+* You have suspended the execution of the thread with **wait()**. It will not become runnable until the thread gets the **notify() or **notifyAll()**.
+
+* The task is waiting for some I/O to complete.
+
+* The task is trying to call a **synchronized** method on antoher object, and that object's lock is not available because it has alaready accquired by another task.
 
 
 
