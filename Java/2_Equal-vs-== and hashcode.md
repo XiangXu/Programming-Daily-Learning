@@ -1,7 +1,7 @@
 # Equal vs == and hashCode()
 
 ### **equals()**
-**equals(Object o)** method is used to indicate whether some other Ojbect o is equal to current object(on which the method has been invoked).
+**equals(Object o)** method is used to indicate whether some other object o is equal to current object(on which the method has been invoked).
 
 ### **==**
 **==** operator works perfectly(and should be in this case) for the primitive data types like int, long, boolean, etc. But for the non-primitive(or reference) data types == operator shows not the equality of the objects, but whether they refer to the same object in memory. It works in such a way due to Java memeory model(JVM): primitives and reference objects are kepet in different memory parts. 
