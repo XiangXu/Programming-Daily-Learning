@@ -492,6 +492,12 @@ public static int get()
 
 * The task is trying to call a **synchronized** method on antoher object, and that object's lock is not available because it has alaready accquired by another task.
 
+### Interruption
+
+**Thread.interrupted()** sets interrupted status for that thread. A thread with its interrupted status set will throw an **InterruptedException** if it is already blocked or it attempts a blocking operation. 
+
+**shutdownNow()** on an **Executor** will send an **interrupt()** call to each of threads it has started. 
+
 
 
 
