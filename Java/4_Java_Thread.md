@@ -79,7 +79,7 @@ public class LiftOffTest
 }
 ```
 
-The call to **shutdown()** prevents new tasks from being submitted to that **Executor**. The current thread will continue to run all tasks submitted before **shutdown()** was called. The program will exit as soon as all the tweeasks in the **Executor** finish.
+The call to **shutdown()** prevents new tasks from being submitted to that **Executor**. The current thread will continue to run all tasks submitted before **shutdown()** was called. The program will exit as soon as all the tasks in the **Executor** finish.
 
 **CachedThreadPool**: creates one thread per task. It will generally create as many threads as it needs during the execution of a program and then will stop creating new threads as it recycles the old ones.
 
