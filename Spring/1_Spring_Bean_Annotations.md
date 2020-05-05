@@ -49,9 +49,9 @@ class VehicleRepository {
 }
 ```
 
-One advantage of using this annotation is that **it has automatically persistence exception translation enabled**. When using a persistence framework such as Hibernate, native exceptions thrown within classes annotated with @Repoitory will be automatically translated into subclass of Spring's DataAccessException. 
+**It has automatically persistence exception translation enabled**.
 
-If you are using Spring Abstraction for JDBC, JPA/Hibernate or JDO then you don't have to implement JDBC or RDBMS vendor specific error handling. So **Spring wraps all those exceptions and then wraps them into DataAccessException class**. When you want to switch to different persistence technology, you don't have to worry about refractoring your code.
+**Spring wraps all those exceptions and then wraps them into DataAccessException class**. When you want to switch to different persistence technology, you don't have to worry about refractoring your code.
 
 ## @Service
 
