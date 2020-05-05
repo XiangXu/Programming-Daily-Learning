@@ -498,7 +498,45 @@ public static int get()
 
 **shutdownNow()** on an **Executor** will send an **interrupt()** call to each of threads it has started. 
 
+### Cooperation between tasks
 
+**wait()** suspends the task while waiting for the world to change, and only when a **notify()** or **norifyAll()** occurs.
+
+**It is important to understand that sleep() does not release the object lock, when it is called, and neither does yield(). wait() release the lock.**
+
+**wait(), notify() and notifyAll() are part of the base class Object and not part of Thread**.
+
+In fact, the only place you can call **wait(), notify() or notifyall()** is within a **synchronized**, otherwise you will get **IllegalMonitorStateException** with message "current thread not owner".
+
+It is essential that you check for your particular condition of interest, and go back into **wait()** if contion is not meet. This is idiomatically(惯用的) written using a **while**.
+
+Use **notify()** instead of **notifyAll()** is an **optimization**. 
+
+**notifyAll()**: only the tasks that are waiting on a particular lock are awoken when this is called for that lock.
+
+**Lock, Condition, signal(), signAll()** are only necessary for more difficlut threading problems.
+
+```java
+private Lock lock = new ReentrantLock();
+private Condition condition = lock.newCondition();
+
+lock.lock();
+lock.unlock();
+
+condition.singalAll();
+```
+
+### Producer-consumers and queues
+
+**synchronized queue** can be used to solve task cooperation problems in abstraction level.
+
+**java.util.concurrent.BlockingQueue** interface, which has number of standard implementations. Usually use the **LinkedBlockingQueue** which is an unbonded queue; the **ArrayBlockingQueue** has a fixed size.
+
+**add()** like offer but it will throw IllegalStateException
+
+**offer()** doesn't wait and will "give up" if the queue has reached capacity. It will return a boolean.
+
+**put()** will wait for space to become available -- in other words, it will block until space is available.
 
 
 
