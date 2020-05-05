@@ -134,3 +134,7 @@ mvn clean package -Pprod
 ```
 @ActiveProfiles("dev")
 ```
+
+Reference
+
+https://www.baeldung.com/spring-profiles
