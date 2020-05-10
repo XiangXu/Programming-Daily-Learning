@@ -486,7 +486,7 @@ public static int get()
 
 * You have put the task to sleep by calling **sleep(milliseconds)**, in which case it will not be run for the specified time.
 
-* You have suspended the execution of the thread with **wait()**. It will not become runnable until the thread gets the **notify() or **notifyAll()**.
+* You have suspended the execution of the thread with **wait()**. It will not become runnable until the thread gets the **notify()** or **notifyAll()**.
 
 * The task is waiting for some I/O to complete.
 
