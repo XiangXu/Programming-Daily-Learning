@@ -538,6 +538,213 @@ condition.singalAll();
 
 **put()** will wait for space to become available -- in other words, it will block until space is available.
 
+### New Library Components
+
+#### CountDownLatch
+
+This is used to synchronize one or more tasks by forcing them to wait for the completion of a set of operations being performed by other tasks. 
+
+You give an initial count to a **CountDownLatch** object, and any task that call **await()** on that object will block until the count reaches zero. Other tasks may call **countDown()** on the object to reduce the count, presumably when a task finishes its job.
+
+**A CountDownLatch is designed to be used in a one-shot fashion; the counter cannot be reset**. *If you need a version that resets the count, you can use a **CyclicBarrier** instead*.
+
+```java
+public class WaitingTask implements Runnable
+{
+    private static int counter = 0;
+    private final int id = counter ++;
+    private final CountDownLatch latch;
+
+    WaitingTask(CountDownLatch latch)
+    {
+        this.latch = latch;
+    }
+
+    @Override
+    public void run() {
+        try{
+            latch.await();
+            System.out.println("Lath barrier passed for " + id);
+        }catch (InterruptedException e){
+            System.out.println(id + " interrupted");
+        }
+    }
+}
+
+public class TaskPortion implements Runnable
+{
+    private static int counter = 0;
+    private final int id = counter ++;
+    private static Random rand = new Random();
+    private final CountDownLatch latch;
+
+    TaskPortion(CountDownLatch latch)
+    {
+        this.latch = latch;
+    }
+
+    @Override
+    public void run() {
+        try
+        {
+            doWork();
+            latch.countDown();
+        }
+        catch (InterruptedException e)
+        {
+
+        }
+    }
+
+    public void doWork() throws InterruptedException {
+        TimeUnit.MILLISECONDS.sleep(rand.nextInt(2000));
+        System.out.println(id + " completed");
+    }
+}
+
+public class CountDownLatchDemo
+{
+    public static void main(String[] args) {
+        int size = 100;
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        CountDownLatch countDownLatch = new CountDownLatch(size);
+        for(int i=0; i<10; i++)
+            executorService.execute(new WaitingTask(countDownLatch));
+
+        for(int i=0; i<size; i++)
+            executorService.execute(new TaskPortion(countDownLatch));
+    }
+}
+
+```
+
+#### CyclicBarrier
+
+A **CyclicBarrier** is used in situations where you want to create a group of tasks to perform work in parallel, and then wait until they are all finished before moving on to the next step. It brings all the parallel tasks into alignment at the barrier so you can move forward in unison. 
+
+```java
+public class TravelTask implements Runnable{
+
+    private CyclicBarrier cyclicBarrier;
+    private String name;
+    private int arriveTime;//赶到的时间
+
+    public TravelTask(CyclicBarrier cyclicBarrier,String name,int arriveTime){
+        this.cyclicBarrier = cyclicBarrier;
+        this.name = name;
+        this.arriveTime = arriveTime;
+    }
+
+    @Override
+    public void run() {
+        try {
+            //模拟达到需要花的时间
+            Thread.sleep(arriveTime * 1000);
+            System.out.println(name +"到达集合点");
+            cyclicBarrier.await();
+            System.out.println(name +"开始旅行啦～～");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (BrokenBarrierException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+public class TourGuideTask implements Runnable{
+
+    @Override
+    public void run() {
+        System.out.println("****导游分发护照签证****");
+        try {
+            //模拟发护照签证需要2秒
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+public class Client {
+
+    public static void main(String[] args) throws Exception
+    {
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(3,new TourGuideTask());
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+        //登哥最大牌，到的最晚
+        executor.execute(new TravelTask(cyclicBarrier,"哈登",5));
+        executor.execute(new TravelTask(cyclicBarrier,"保罗",3));
+        executor.execute(new TravelTask(cyclicBarrier,"戈登",1));
+        
+        executor.shutdown();
+    }
+}
+
+// 戈登到达集合地点
+// 保罗到达集合地点
+// 哈登到达集合地点
+// ****导游分发护照签证****
+// 戈登开始旅行了
+// 保罗开始旅行了
+// 哈登开始旅行了
+```
+
+#### DelayQueue
+
+This is an unbounded **BlockingQueue** of objects that implement the **Delayed** interface. An object can only be taken from the queue when its delay has expired. The queue is sorted so that the object at the head has a dealy that has expired for the longest time. If no delay has expired, then there is no head element and **poll()** will return **null**.
+
+#### PriorityBlockingQueue
+
+This is basically a priority queue that has blocking retrieval operations. 
+
+#### Semaphore
+
+A normal lock(from concurrent.locks or the build-in synchronized lock) only allows one task at a time to access a resource. A **counting semaphore** allows n tasks to access the resource at the same time.
+
+#### Exchanger
+
+An **Exchanger** is a barrier that swaps objects between two tasks. When the tasks enter the barrier, they have one object, and when they leave, they have the object that formerly held by the other task. **Exchanger**s are typically used when one task is creating objects that are expensive to produce and another task is consuming those objects. 
+
+```java
+public class ExchangerTest
+{
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newCachedThreadPool();
+        final Exchanger exchanger = new Exchanger();
+        executor.execute(new Runnable() {
+            String data1 = "Ling";
+
+            @Override
+            public void run() {
+                doExchangeWork(data1, exchanger);
+            }
+        });
+
+        executor.execute(new Runnable() {
+            String data1 = "huhx";
+
+            @Override
+            public void run() {
+                doExchangeWork(data1, exchanger);
+            }
+        });
+        executor.shutdown();
+    }
+
+    private static void doExchangeWork(String data1, Exchanger exchanger) {
+        try {
+            System.out.println(Thread.currentThread().getName() + "正在把数据 " + data1 + " 交换出去");
+            Thread.sleep((long) (Math.random() * 1000));
+
+            String data2 = (String) exchanger.exchange(data1);
+            System.out.println(Thread.currentThread().getName() + "交换数据 到  " + data2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+```
 
 
 Reference:
