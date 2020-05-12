@@ -744,6 +744,8 @@ public class ExchangerTest
 
 ```
 
+ReentrantReadWriteLock: 加读锁时其他线程可以进行读操作但不可进行写操作，加写锁时其他线程读写操作都不可进行。
+
 Reference:
 
 Thinking In Java
