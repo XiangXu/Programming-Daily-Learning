@@ -1,7 +1,5 @@
 # Java Thread
 
-## Basic Threading
-
 ### Defining tasks
 
 A thread drives a task, so you need a way to describe that tasks. This is provided by the **Runnable** interface.
@@ -745,7 +743,6 @@ public class ExchangerTest
 }
 
 ```
-
 
 Reference:
 
