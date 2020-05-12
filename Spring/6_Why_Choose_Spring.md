@@ -26,4 +26,8 @@ Cons:
 * **Modularity**: We can optionally include one or more Sprong projects depending upon the need.
 * **Conformance(一致性)**: Although Spring does not support all of Jakarta EE specifications, it supports all of its technologies, often improving the support over the standard specification where necessary. For instance, Spring supports JPA based repositories and hence makes it trivial to switch providers.
 
+Reference
+
+https://www.baeldung.com/spring-why-to-choosex
+
 
