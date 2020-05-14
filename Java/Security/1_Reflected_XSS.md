@@ -50,7 +50,8 @@ If another user of the application requests the attacker's URL, then the script 
 
 It arises when an application receives data from an untrusted source and includes that data within its later HTTP responses in an unsafe way.
 
-The data in question might be submitted to the application via HTTP requests; for example, comments on a blog post, user nicknames in a chat room, or contact details on a customer order. In other cases, the data might arrive from other untrusted sources; for example, a webmail application displaying messages received over SMTP, a marketing application displaying social media posts, or a network monitoring application displaying packet data from network traffic.
+The data in question might be submitted to the application via HTTP requests; for example, comments on a blog post, user nicknames in a chat room, or contact details on a customer order. 
+In other cases, the data might arrive from other untrusted sources; for example, a webmail application displaying messages received over SMTP, a marketing application displaying social media posts, or a network monitoring application displaying packet data from network traffic.
 
 ```html
 <p>Hello, this is my message!</p>
