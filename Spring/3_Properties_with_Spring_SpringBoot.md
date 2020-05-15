@@ -66,7 +66,7 @@ private Environment env;
 dataSource.setUrl(env.getProperty("jdbc.url"));
 ```
 
-**Using <property-placeholder> will not expose the properties to the Spring Environment – this means that retrieving the value like this will not work – it will return null**.
+**Using property-placeholder will not expose the properties to the Spring Environment – this means that retrieving the value like this will not work – it will return null**.
 
 ## Properties With Spring Boot
 
