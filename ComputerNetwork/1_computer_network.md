@@ -26,7 +26,7 @@
 
 **HTTP(Hypertext Transfer Protocol)**: it is a protocol that allows communication between different systems. WWW is about coummunicaiton between web clients and services. Communication between client computers and web server is done by sending HTTP Requests and receving HTTP Response. 
 
-**HTTP(Hypertext Transfer Protocol Secure)**: it is used for secure communication over a computer network. In HTTPS is encrypted using TLS(Transport Layer Security) or, formerly, its predecessor, SSL(Secure Socket Layer). The authentication aspect of HTTPS requires a trusted third party to sign server side digital certificates.
+**HTTPS(Hypertext Transfer Protocol Secure)**: it is used for secure communication over a computer network. In HTTPS is encrypted using TLS(Transport Layer Security) or, formerly, its predecessor, SSL(Secure Socket Layer). The authentication aspect of HTTPS requires a trusted third party to sign server side digital certificates.
 
 
 
