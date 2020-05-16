@@ -42,3 +42,7 @@ We can use Spring Expression Language to specify an expression and a default.
 @Value("#{systemProperties['some.key'] ?: 'my default system property value'}")
 private String spelWithDefaultValue;
 ```
+
+Reference:
+
+https://www.baeldung.com/spring-value-defaults
