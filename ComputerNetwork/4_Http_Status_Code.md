@@ -1,6 +1,7 @@
 # Http Status Codes
 
 * **200**: OK
+* **302**: URL Redirection
 * **400**: Bad Request
 * **401**: Unauthorized
 * **402**: Payment required
