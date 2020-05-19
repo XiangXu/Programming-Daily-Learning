@@ -172,3 +172,7 @@ public String duplicateJson() {
     return "{\"message\":\"Duplicate\"}";
 }
 ```
+
+Reference:
+
+https://www.baeldung.com/spring-requestmapping
