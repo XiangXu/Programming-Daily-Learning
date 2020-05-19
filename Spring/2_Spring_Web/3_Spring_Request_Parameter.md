@@ -100,3 +100,7 @@ IDs are [1,2]
 **@PathVariables extract values from the URI path**.
 
 Both @RequestParam and @PathVariable can be optional. We should be careful when making @PathVariable optional to avoid conflicts in paths.
+
+Reference:
+
+https://www.baeldung.com/spring-request-param

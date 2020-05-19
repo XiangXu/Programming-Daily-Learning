@@ -55,3 +55,7 @@ public class ExamplePostController {
 ```
 
 **Remember, we don't need to annotate the @RestController-annotated controllers with the @ResponseBody annotation since Spring does it by default**.
+
+Reference:
+
+https://www.baeldung.com/spring-request-response-body

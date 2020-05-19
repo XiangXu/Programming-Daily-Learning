@@ -48,3 +48,7 @@ public class SimpleBookRestController {
 
 **The controller is annotated with the @RestController annotation, therefore the @ResponseBody isn't required**.
 
+Reference:
+
+https://www.baeldung.com/spring-controller-vs-restcontroller
+
