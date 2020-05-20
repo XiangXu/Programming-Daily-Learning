@@ -19,7 +19,7 @@ Scrum流程可以分为以下几个阶段
 3. 有了Product Backlog, 我们需要通过Sprint Planning Meeting(迭代计划会议)来从中挑选一些Product Backlog加入Sprint(迭代)，形成Sprint Backlog(迭代需求池)。这个目标的时间周期是1~4个星期。
 4. Sprint Backlog是由Scrum Tean去完成，每个成员根据Sprint Backlog再细化成更小的任务(细到每个任务的工作量在2天内完成)。
 5. 在Scrum Team完成计划会议上选出的Sprint Backlog过程中，需要进行Daily Scrum Meeting(每日站立会议)，每次会议控制在15分钟之内。Daily Scrum Meeting根据看板的内容，每个人进行发言，并且向所有的成员当面汇报昨天完成了什么，今天要完成什么，如果遇到不能解决的问题也可以提出。每个人回答完成以后，都要更新Burn down chart(燃尽图)。
-6. 当Spring Backlog已完成，也就表示一次Sprint完成。这时，我们要进行Sprint Review Meeting(迭代评审会议)，PO和客户都要参加。每一个Scrum Team成员都要向他们演示自己完成的软件产品(这个会议非常重要，一定不能取消)。
+6. 当Sprint Backlog已完成，也就表示一次Sprint完成。这时，我们要进行Sprint Review Meeting(迭代评审会议)，PO和客户都要参加。每一个Scrum Team成员都要向他们演示自己完成的软件产品(这个会议非常重要，一定不能取消)。
 7. 最后的就是Sprint Restrospective Meeting(迭代回顾会议)，该会议以轮流发言的方式，每个人都要发言，总结并讨论改进的地方，放入下一轮Sprint的产品需求中。
 
 **在Scrum开发流程中，应当严格遵循“343”原则，即Scrum框架中的3个产物，4个仪式，3种角色**。
