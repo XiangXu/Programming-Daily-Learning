@@ -1,6 +1,6 @@
 # Continuous Integration and Continuous Delivery
 
-Continuous Integration and Continuous Delivery are the processes in which **your development team involves frequent code changes that are pushed in the main branch while ensuring that it does not impact any changes made by developers working parallelly**. The aim of it is to reduce the chance of defects and conflicts during the integration of the complete project.
+Continuous Integration and Continuous Delivery are the processes in which **your development team involves frequent code changes that are pushed in the main branch while ensuring that it does not impact any changes made by developers working parallelly**. The aim of it is to reduce the chance of defects(缺点) and conflicts during the integration of the complete project.
 
 ## What is Continuous Integration
 
@@ -42,7 +42,7 @@ Not only that, with the development and testing team working together in automat
 
 **Continuous deployment is somewhat similar to continuous integration. It is the process where your application can be deployed at any time to production or test environment if the current version passes all the automated unit test cases**.
 
-**Continuous delivery is the methodology where your codebase cay be deployed at anytime. Apart from ensuring that your application has successfully passed all automated test cases, it aslo saved the configuration requried to deploy code in production, resulting in a faster application development lifecycle**.
+**Continuous delivery is the methodology where your codebase cay be deployed at anytime. Apart from ensuring that your application has successfully passed all automated test cases, it aslo saved the configuration required to deploy code in production, resulting in a faster application development lifecycle**.
 
 ## How To Perform Continuous Delivery?
 
