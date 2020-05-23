@@ -70,6 +70,7 @@ class RR {
 
 ```
 
+
 ## Static
 
 The static keyword in Java is **used for memory management mainly**.
@@ -115,6 +116,10 @@ Why is the Java main method static?
 
 It is because the object is not required to call a static method. If it were a non-static method, JVM creates an object first then call main() method that will lead the problem of extra memory allocation.
 
+### Static Nested Class
+
+Check details in 8_Java_Inner_Class.md
+
 
 ## ArrayList vs LinkedList
 
@@ -129,7 +134,6 @@ ArrayList and LinkedList both implement List interface and maintain insertion or
 | An ArrayList class can act as a list only because it implements List only. |  LinkedList class can act as a list and queue both because it implements List and Deque interfaces. |
 | ArrayList is **better for storing and accessing data**. |  LinkedList is **better for manipulating data**. |
 
-
 ## HashMap vs TreeMap vs LinkedHashMap
 
 **HashMap** is implemented as a hash table, and there is no ordering on keys or values.
@@ -138,7 +142,6 @@ ArrayList and LinkedList both implement List interface and maintain insertion or
 
 **LinkedHashMap** preverses the insertion order. 
 
-
 ## HashSet vs TreeSet vs LinkedHashSet
 
 **HashSet** implements set interface, underlying data structure for HashSet is hashtable. Duplicate values are not allowed. 
@@ -146,8 +149,6 @@ ArrayList and LinkedList both implement List interface and maintain insertion or
 **TreeSet** is implemented based on red-black tree structure, and it is ordered by the value.
 
 **LinkedHashSet** preverses the insertion order. 
-
-
 
 
 ## BigDecimal
@@ -253,6 +254,7 @@ List<String> list = new ArrayList<String>();
 CollectionUtils.addAll(list, str);
 ```
 
+
 ## Difference between Collection.toArray() and Collection.toArray(Object obj[])
 
 One is generic, the other isn't. toArray() will return Object[] while toArray(T[]) will return an array of type T[].
@@ -270,6 +272,7 @@ public static void main(String[] args) {
 //java.lang.String[]
 ```
 
+
 ### Do not add/remove in foreach loop. To safely remove from a collection while iterating over it you should use an Iterator. 
 ```java
 List<String> names = ....
@@ -280,99 +283,6 @@ while (i.hasNext()) {
    i.remove();
 }
 ```
-### Implement Stack
-```java
-import java.lang.IllegalArgumentException;
-import java.util.Arrays;
-
-class MyStack{
-    private int[] storage;
-    private int capacity;
-    private int count;
-    private static final int GROW_FACTORY = 2;
-
-    public MyStack()
-    {
-        this.capacity = 8;
-        this.storage = new int [8];
-        this.count = 0;
-    }
-
-    public MyStack(int initialCapacity)
-    {
-        if(initialCapacity < 1)
-            throw new IllegalArgumentException("Capacity too small");
-
-        this.capacity = initialCapacity;
-        this.storage = new int[initialCapacity];
-        this.count = 0;
-    }
-
-    private void ensureCapacity(){
-        int newCapacity = capacity * GROW_FACTORY;
-        storage = Arrays.copyOf(storage, newCapacity);
-        capacity = newCapacity;
-    }
-
-    public void push(int value)
-    {
-        if(count == capacity)
-            ensureCapacity();
-
-        storage[count++] = value;
-    }
-
-    public int pop()
-    {
-        if(count == 0)
-            throw new IllegalArgumentException("Stack is empty");
-        count --;
-        return storage[count];
-    }
-
-    public int peek()
-    {
-        if(count == 0)
-            throw new IllegalArgumentException("Stack is empty");
-        else
-            return storage[count--];
-    }
-
-    public boolean isEmpty()
-    {
-        return count == 0;
-    }
-
-    public int size()
-    {
-        return count;
-    }
-}
-
-public class TestStack{
-     public static void main(String []args)
-     {
-        MyStack myStack = new MyStack(3);
-        myStack.push(1);
-        myStack.push(2);
-        myStack.push(3);
-        myStack.push(4);
-        myStack.push(5);
-        myStack.push(6);
-        myStack.push(7);
-        myStack.push(8);
-        System.out.println(myStack.peek());//8
-        System.out.println(myStack.size());//8
-        for (int i = 0; i < 8; i++) {
-            System.out.println(myStack.pop());
-        }
-        System.out.println(myStack.isEmpty());//true
-        myStack.pop();//报错：java.lang.IllegalArgumentException: Stack is empty.
-     }
-}
-```
-
-
 
 Reference:
 
