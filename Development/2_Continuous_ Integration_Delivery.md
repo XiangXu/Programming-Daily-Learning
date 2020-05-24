@@ -40,9 +40,10 @@ Not only that, with the development and testing team working together in automat
 
 **Continuous integration is usually the process when code changes made by different developers are integrated into the main code branch as soon as possible**. It is usually done several times a day. The process ensures that code changes committed by individual developers do not divert or impact the main code branch. When combined with automated testing, it ensures that your code is dependable and can be moved into the next phase, i.e. testing or production.
 
-**Continuous deployment is somewhat similar to continuous integration. It is the process where your application can be deployed at any time to production or test environment if the current version passes all the automated unit test cases**.
+![io2](/Development/images/ci_1.gif)
 
-**Continuous delivery is the methodology where your codebase cay be deployed at anytime. Apart from ensuring that your application has successfully passed all automated test cases, it aslo saved the configuration required to deploy code in production, resulting in a faster application development lifecycle**.
+With **Continuous Delivery**, **"Deploy to Production" is a manual process**, meaning that it is initiated manually. The differs from Continuous Development, which is automated all the way through "Post Development Test".
+
 
 ## How To Perform Continuous Delivery?
 
@@ -100,3 +101,5 @@ Not only that, with the development and testing team working together in automat
 Reference:
 
 https://dzone.com/articles/what-is-continuous-integration-andontinuous-delive
+
+https://dzone.com/articles/continuous-delivery-vs-continuous-deployment-an-ov
