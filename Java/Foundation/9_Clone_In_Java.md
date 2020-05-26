@@ -67,6 +67,7 @@ public class Student {
 }
 ```
 
+
 ## clone() method, Shallow, Deep Copy, and Lazy Copy
 
 We all know that Object is the parent class of all the classes in Java and the clone() method of this class whenever invoked, JVM does the following things:
@@ -76,6 +77,219 @@ We all know that Object is the parent class of all the classes in Java and the c
 2. If the class contains members of any class type then **only the object references to those members are copied** and hence the member references in both the original object as well as the cloned object refer to the same object.
 
 Although, we can always override clone() as per our implementation.
+
+In this example, we will see that when we only have primitive data types with use the clone() method by default will give a different cloned object.
+
+```java
+import java.util.Objects;
+
+public class Student implements Cloneable {
+
+    private String name;
+    private int rollNumber;
+
+    Student(int rollNumber, String name) {
+        this.rollNumber = rollNumber;
+        this.name = name;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+      //not doing anything
+    }
+
+    public int getRollNumber() {
+        return rollNumber;
+    }
+
+    public void setRollNumber(int rollNumber) {
+        this.rollNumber = rollNumber;
+    }
+}
+
+public class DeepVsShallowTesting {
+
+    public static void main(String[] args) throws CloneNotSupportedException {
+        Student student1 = new Student(1, "Rio");
+        Student student2 = (Student) student1.clone();
+
+        System.out.println((student1.equals(student2)) ? "equal" : "not equal");        //not equal
+
+        //this will only update the roll number of student 1
+        student1.setRollNumber(2);
+        System.out.println(student1.getRollNumber() + " " + student2.getRollNumber());  //2 1
+    }
+}
+```
+
+Let's try to add a custom Book class in our student object and see what happens keeping everything else fixed.
+
+```java
+public class Book implements Cloneable {
+
+    private String name;
+    private int pages;
+    private float price;
+
+    public Book(String name, int pages, float price) {
+        this.name = name;
+        this.pages = pages;
+        this.price = price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+
+public class Student implements Cloneable {
+
+    private String name;
+    private int rollNumber;
+    private Book book;
+
+    Student(int rollNumber, String name, Book book) {
+        this.rollNumber = rollNumber;
+        this.name = name;
+        this.book = book;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    public int getRollNumber() {
+        return rollNumber;
+    }
+
+    public void setRollNumber(int rollNumber) {
+        this.rollNumber = rollNumber;
+    }
+
+    public Book getBook() {
+        return book;
+    }
+}
+
+public class DeepVsShallowTesting {
+
+    public static void main(String[] args) throws CloneNotSupportedException {
+        Book book = new Book("Harry Potter", 120, 120.54F);
+        Student student1 = new Student(1, "Rio", book);
+        Student student2 = (Student) student1.clone();
+
+        System.out.println((student1.equals(student2)) ? "equal" : "not equal");        //not equal
+        System.out.println((student1.getBook().equals(student2.getBook())) ? "equal" : "not equal");        //equal
+
+        //this will only update the roll number of student 1
+        student1.setRollNumber(2);
+        System.out.println(student1.getRollNumber() + ", " + student2.getRollNumber());  //2 1
+        //but this will update both the object's book data since book is a custom class
+        student1.getBook().setName("Harry Potter New");
+        System.out.println(student1.getBook().getName() + ", " + student2.getBook().getName());  //Harry Potter New, Harry Potter New
+    }
+}
+```
+
+As we can see, we got the same reference to the book object present in the Student class since we didn't write the cloning logic inside clone() method of Student class.
+
+**Shallow clone is default implementation in Java. In overriden clone the method, if you are not cloning all the object types(not primitives), then you are making a shallow copy**.
+
+To correctly implement this, we will ask the compiler to clone the book object as well in clone() of Student class and for that, clone() of Book also need to be overridden and hence we can achieve the different reference for our complete Student object - this is what we call **deep copy** because both original and cloned objects can change independently of each other.
+
+```java
+public class Book implements Cloneable {
+
+    private String name;
+    private int pages;
+    private float price;
+
+    public Book(String name, int pages, float price) {
+        this.name = name;
+        this.pages = pages;
+        this.price = price;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        //since this contains only primitive data types, we need not write anything here
+        return super.clone();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+
+public class Student implements Cloneable {
+
+    private String name;
+    private int rollNumber;
+    private Book book;
+
+    Student(int rollNumber, String name, Book book) {
+        this.rollNumber = rollNumber;
+        this.name = name;
+        this.book = book;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        Student clonedStudent = (Student)super.clone();
+        clonedStudent.setBook((Book)clonedStudent.getBook().clone());
+        return clonedStudent;
+    }
+
+    public int getRollNumber() {
+        return rollNumber;
+    }
+
+    public void setRollNumber(int rollNumber) {
+        this.rollNumber = rollNumber;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+    public Book getBook() {
+        return book;
+    }
+ }
+
+ public class DeepVsShallowTesting {
+
+    public static void main(String[] args) throws CloneNotSupportedException {
+        Book book = new Book("Harry Potter", 120, 120.54F);
+        Student student1 = new Student(1, "Rio", book);
+        Student student2 = (Student) student1.clone();
+
+        System.out.println((student1.equals(student2)) ? "equal" : "not equal");        //not equal
+        System.out.println((student1.getBook().equals(student2.getBook())) ? "equal" : "not equal");        //not equal
+
+        //this will only update the roll number of student 1
+        student1.setRollNumber(2);
+        System.out.println(student1.getRollNumber() + ", " + student2.getRollNumber());  //2 1
+        //this will only update the book object of student 1
+        student1.getBook().setName("Harry Potter New");
+        System.out.println(student1.getBook().getName() + ", " + student2.getBook().getName());  //Harry Potter New, Harry Potter
+    }
+}
+```
+
+As we can see, everything works perfectly here but we can also see that deep copying is a very expensive process as compared to the shallow copy and it is also very cumbersome(笨重的) if we have so many nested classes.
+
+So the slolution is: Lazy Copy.
 
 ## Lazy Copy
 
