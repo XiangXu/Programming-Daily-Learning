@@ -10,7 +10,7 @@ Web application servers are generally "stateless":
 
 ## Cookie
 
-**Cookies are name-value pari messages that web servers pass to you web browser when you visit websites**.
+**Cookies are name-value pair messages that web servers pass to you web browser when you visit websites**.
 
 Common uses of cookies are authentication, storing of site perference, shopping cart item, and server session identification.
 
