@@ -223,7 +223,7 @@ System.out.println(array[0]);//1
 Integer[] myArray = { 1, 2, 3 };
 ```
 
-The list of **Arrays.asList()** returned is not the type of **java.util.ArrayList**, it is an internal class in **java.util.Arrays**. **So you can not modify it by using default List moethods.**
+The list of **Arrays.asList()** returned is not the type of **java.util.ArrayList**, it is an internal class in **java.util.Arrays**. **So you can not modify it by using default List methods.**
 ```java
 List myList = Arrays.asList(1, 2, 3);
 myList.add(4);//Error：UnsupportedOperationException
