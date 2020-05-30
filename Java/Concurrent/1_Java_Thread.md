@@ -432,7 +432,7 @@ catch(InterruptedException e)
 
 ### Atomicity and volatility
 
-*If you can write a high-performance JVM for a modern microprocessor, then you are qualified to think about wheter your can void synchronizing.*
+*If you can write a high-performance JVM for a modern microprocessor, then you are qualified to think about whether your can void synchronizing.*
 
 **Reading and writing primitive variables other than long and double is guaranteed to go to and from memory as indivisible(atomic) operations. You do get atomicity if you use the volatile keyword when defining a long or double variable.**
 
