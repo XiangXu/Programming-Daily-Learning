@@ -58,7 +58,7 @@ In method area, all class level information like class name, immdeiate parent cl
 
 ### Heap area:
 
-Information of all objects is stored in heap memory. There is also one Heap Area per JVM. It is also a shared resource.
+Information of all objects are stored in heap memory. There is also one Heap Area per JVM. It is also a shared resource.
 
 ### Stack area:
 
