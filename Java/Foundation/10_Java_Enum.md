@@ -40,6 +40,10 @@ public class Test
         System.out.println(c1); 
     } 
 }
+
+// Output :
+// RED
+// RED
 ```
 
 * First line inside enum should be list of constants and then other things like methods, variables and constructor.
@@ -116,6 +120,11 @@ public class Test
         // System.out.println(Color.valueOf("WHITE")); 
     } 
 }
+
+// RED at index 0
+// GREEN at index 1
+// BLUE at index 2
+// RED
 ```
 
 ## constructor and methods
@@ -155,6 +164,12 @@ public class Test
         c1.colorInfo(); 
     } 
 } 
+
+// Constructor called for : RED
+// Constructor called for : GREEN
+// Constructor called for : BLUE
+// RED
+// Universal Color
 ```
 
 ## Enum with Customized Value in Java
@@ -207,6 +222,10 @@ public class EnumParameterTest
         }
     }
 }
+
+// name : RED action: STOP
+// name : GREEN action: GO 
+// name : ORANGE action: SLOW DOWN 
 
 ```
 
