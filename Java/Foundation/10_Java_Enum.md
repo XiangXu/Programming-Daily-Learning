@@ -48,7 +48,7 @@ public class Test
 
 * First line inside enum should be list of constants and then other things like methods, variables and constructor.
   
-* According to Java naming conventions, it is recommended that we name constant with all capital letters.
+* According to Java naming conventions, it is recommended that we **name constant with all capital letters**.
 
 ## Important points of enum:
 
