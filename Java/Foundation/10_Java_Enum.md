@@ -76,7 +76,7 @@ class Color
 
 * All enums implicitly extend **java.lang.Enum.class**. As a class can only extend **one** parent in Java, so an enum cannot extend anything else.
 
-***toString() method** is overridden in **java.lang.Enum class**. which returns enum constant name.
+* **toString() method** is overridden in **java.lang.Enum class**. which returns enum constant name.
 
 * enum can implement many interfaces.
 
