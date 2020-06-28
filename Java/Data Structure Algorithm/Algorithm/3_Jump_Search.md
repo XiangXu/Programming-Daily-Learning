@@ -23,6 +23,7 @@ In the worst case, we have to do N/B jumps and if the element is not present, we
 Calculation steps:
 
 m/m = n * m<sup>-1</sup> -> -1 * (n * m<sup>-2</sup>) -> -n/m<sup>2</sup>
+
 m-1 = 1 * (m-1)<sup>0</sup> = 1
 
 
