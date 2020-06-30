@@ -64,7 +64,7 @@ public static int jumpSearch(int[] values, int target)
 
 ### Time Complexity
 
-The while loop in the above C++ code executes n/m times because the loop counter increments by m times in every iteration. Since the optimal value of m= √n , thus, n/m=√n resulting in a time complexity of O(√n).
+The while loop in the above C++ code executes n/m times because the loop counter increments by m times in every iteration. Since the optimal value o**f m= √n , thus, n/m=√n resulting in a time complexity of O(√n)**.
 
 ### Space Complexity
 
