@@ -2,7 +2,7 @@
 
 Jump Search Algorithm is a relatively new alogrithm for searching an element in **a sorted array**.
 
-The fundamental idea behind this searching technique is to search fewer number of elements compared to linear search algorithm(which scans every element in the array to check if it matches with the element being searched or not). This can be done by skipping some fixed number of array elements or **jumping ahead by fixed number of steps** in every iteration.
+The fundamental idea behind this searching technique is to s**earch fewer number of elements compared to linear search algorithm**(which scans every element in the array to check if it matches with the element being searched or not). This can be done by skipping some fixed number of array elements or **jumping ahead by fixed number of steps** in every iteration.
 
 Lets consider a sorted array A[] of size n, with indexing ranging between 0 and n-1, and elemente x that needs to be searched in the array A[]. For implementing this algorithm, a block of size m is also required, that can be skipped or jumped in every iteration. Thus, the algorithm works as follow:
 
@@ -64,7 +64,7 @@ public static int jumpSearch(int[] values, int target)
 
 ### Time Complexity
 
-The while loop in the above C++ code executes n/m times because the loop counter increments by m times in every iteration. Since the optimal value o**f m= √n , thus, n/m=√n resulting in a time complexity of O(√n)**.
+The while loop in the above C++ code executes n/m times because the loop counter increments by m times in every iteration. Since the optimal value of **m= √n, thus, n/m=√n resulting in a time complexity of O(√n)**.
 
 ### Space Complexity
 
