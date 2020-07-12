@@ -4,7 +4,7 @@
 
 **Map is a collection which stores elements as key-value pairs. A map cannot contain duplicate keys and each key can map to at most one value**. The map interface includes methods for basic operations such as put, get, remove, containsKey, containsValue, size, and empty, bulk operations such as putAll and clear, and collection views such as keySet, entrySet, and values.
 
-HashMap implements Map interface in Java. **It is not synchronized and it is not thread safe**. HashMap works with Hashing, to understand hashing, we should understand firs about HashFunction, HashValue and Bucket.
+HashMap implements Map interface in Java. **It is not synchronized and it is not thread safe**. HashMap works with Hashing, to understand hashing, we should understand first about HashFunction, HashValue and Bucket.
 
 ## What is Hashing?
 
