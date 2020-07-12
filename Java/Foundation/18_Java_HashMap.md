@@ -69,6 +69,41 @@ How linked list is replaced with binary tree?
 
 **In Java 8, HashMap replaces linkedlist with a binary tree when the number of element in a backet reaches certain threshold. While converting the list to binary tree, hashcode is used as a branching variable. If there are two different hashcodes in the same bucket, one is considered bigger goes to the right of the tree and other one to the left. But when both the hashcode are equal, HashMap assumes that the keys are comparable, and compares the key to determine the direction so that some order can be maintained. It is a good practice to make the keys of HashMap comparable**.
 
+## Questions:
+
+1. Describe time complexisty of lookups in a hashMap?
+
+It is usually O(1), with a decent hash which itself is constant time. However, it the worst case, a hashMap has an O(n) look up due to walking through all entries in the same hash bucket. In JDK8, HashMap replaces linkedlist with a binary tree when the number of element in a backet reaches certain threshold, so the time complexity would be O(logn).
+
+2. How does bucket index calculation work in a hashMap?
+
+```java
+static int indexFor(int h, int length) {
+   return h & (length-1);
+}
+```
+
+The hash itself is calculated by the hashCode() method of the object you're tyring to store.
+
+What you see here is calculating the "bucket" to store the object based on the hash h. Ideally, to evade collisions, you would have the same number of buckets as is the maximum achievable value of h - but that could be too memory demanding. Therefore, you usually have a lower number of buckets with a danger of collisions.
+
+If h is, say, 1000, but you only have 512 buckets in your underlying array, you need to know where to put the object. Usually, a mod operation on h would be enough, but that's too slow. Given the internal property of HashMap that the underlying array always has number of buckets equal to 2^n, the Sun's engineers could use the idea of h & (length-1), it does a bitwise AND with a number consisting of all 1's, practically reading only the n lowest bits of the hash (which is the same as doing h mod 2^n, only much faster).
+
+**The expression h & (length-1) does a bit-wise AND on h using length-1, which is like a bit-mask, to return only the low-order bits of h, thereby making for a super-fast variant of h % length.**
+
+```
+hash h: 11 1110 1000  -- (1000 in decimal)
+length  l: 10 0000 0000  -- ( 512 in decimal)
+        (l-1): 01 1111 1111  -- ( 511 in decimal - it will always be all ONEs)
+h AND   (l-1): 01 1110 1000  -- ( 488 in decimal which is a result of 1000 mod 512)
+```
+
+3. How to prevent collision in HashMap?
+
+* Ensure you override hashCode() and equals() method.
+* Create a hash function that creates the best possible distribution of values throughout the hashMap.
+
+
 Reference
 
 https://examples.javacodegeeks.com/core-java/maphashmap-works-internally-java/
