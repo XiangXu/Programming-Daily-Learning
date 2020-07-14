@@ -110,67 +110,6 @@ Difference between TCP/IP and OSI Model:
 
 Read this: https://juejin.im/post/5d9c284b518825095879e7a5
 
-**Sequence number**: Sequence number, which is 32 bits, is used to identify the byte stream sent from the TCP source to the destination. This is marked when the initiator sends data.
-
-**Confirmation serial number**: Ack serial number, which occupies 32 digits. Only when the ACK flag is 1, the confirmation sequence number field is valid, Ack=Seq+1.
-
-**SYN**: Initiate a new connection.
-
-**FIN**: Release a leveling (finish).
-
-**ACK**: The confirmation serial number is valid.
-
-**RST**: reconnect.
-
-**URG**: Urgent pointer is valid.
-
-### Three-way handshake 
-
-The so-called three-way handshake (Three-Way Handshake) means establishing a TCP connection,
-
-Do not confuse the confirmation sequence number Ack with the ACK in the flag bit.
-
-**First handshake**: 
-
-Client sets the flag SYN to 1, randomly generates a value seq=J, and sends the packet to the server. The client enters the **SYN_SENT** state and waits for the server to confirm.
-
-**Second handshake**:
-
-After the server receives the data packet, it is known by the flag bit SYN=1 that the client requests to establish a connection. The server sets the flag bits SYN and ACK to 1, ack=J+1, and randomly generates a value seq = K, and the datagram is sent to the Client to confirm the connection request, and the Server enters the **SYN_RCVD** state.
-
-**Third handshake**:
-
-After the client receives the acknowledgment, it checks whether ack is J+1, whether the ACK is 1, and if it is correct, sets the flag ACK to 1, ack=K+1, and sends the packet. Server, Server checks whether ack is K+1, ACK is 1. If it is correct, the connection is successful, Client and Server enter **ESTABLISHED** state, complete three-way handshake, and then the client and server can start to transfer data.
-
-1. SYN=1, seq=x
-2. SYN=1, ACK=1, seq=y, ack=x+1
-3. ACK=1, seq=x+1, ack=y+1
-
-
-![Three-way](https://user-gold-cdn.xitu.io/2019/10/8/16da9fd28a45bd19?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
-
-### Four-way handshake 
-
-The so-called Four-Way Wavehand terminates the TCP connection.
-
-**The first wave**: The client sends a FIN to close the data transfer from the client to the server, and the client enters the **FIN_WAIT_1** state.
-
-**The second wave**: After the server receives the FIN, it sends an ACK to the client, confirming that the serial number is the received sequence number +1 (same as SYN, one FIN occupies a sequence number), and the server enters the **CLOSE_WAIT** state.
-
-**The third wave**: The server sends a FIN to close the data transfer from the server to the client, and the server enters the **LAST_ACK** state.
-
-**The fourth wave**: After the client receives the FIN, the client enters the TIME_WAIT state, and then sends an ACK to the server, confirming that the serial number is the received sequence number +1, the server enters the CLOSED state, and completes the wave wave four times.
-
-1. FIN=1, seq=u
-2. ACK=1, seq=v, ack=u+1
-3. FIN=1, ACK=1, seq=w, ack=u+1
-4. ACK=1, seq=u+1, ack=w+1
-
-![Four-way](https://user-gold-cdn.xitu.io/2019/10/8/16da9fd28b49f652?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
-
-
-
-
 Reference:
 
 https://www.geeksforgeeks.org/tcp-ip-model/
