@@ -28,3 +28,7 @@ In the following image, the first element of the list that is i.e. 13 stored at 
 We can traverse the list in this way until we find any node containing null or -1 in its next part.
 
 ![alt text](https://static.javatpoint.com/ds/images/doubly-linked-list-memory-representation.png)
+
+Reference
+
+https://www.javatpoint.com/doubly-linked-list

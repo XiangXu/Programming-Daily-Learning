@@ -15,3 +15,7 @@ However, **due to the fact that we are considering circular linked list in the m
 ![alt text](https://static.javatpoint.com/ds/images/memory-representation-circular-singly-linked-list.png)
 
 We can also have more than one number of linked list in the memory with the different start pointers pointing to the different start nodes in the list. The last node is identified by its next part which contains the address of the start node of the list. We must be able to identify the last node of any linked list so that we can find out the number of iterations which need to be performed while traversing the list.
+
+Reference
+
+https://www.javatpoint.com/circular-singly-linked-list
