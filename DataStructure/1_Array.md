@@ -38,3 +38,6 @@ Now as you know that arrays are object of a class and direct superclass of array
 * **When you clone a single dimensional array**, such as Object[], a **deep copy** is performed with the new array containing copies of the original array's elements as opposed to references.
 * **A clone of a multidimensional array(like Object[][])** is a **shallow copy** however, which is to say that **it creates only a single new array with each element array of a reference to an original element arrays but subarrays are shared**.
 
+# Reference
+
+https://www.geeksforgeeks.org/introduction-to-arrays/
