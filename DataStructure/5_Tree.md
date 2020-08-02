@@ -1,14 +1,3 @@
-# Binary Tree
-
-**A tree whose elements have at most 2 children is called a binary tree**. Since each element in a binary tree can have only 2 children, we typically name them the left and right child.
-
-![binaryTree](https://www.geeksforgeeks.org/wp-content/uploads/binary-tree-to-DLL.png)
-
-A Binary Tree contains following parts.
-1. Data
-2. Pointer to left child
-3. Pointer to right child
-
 ## Tree
 
 ### Introduction
@@ -36,7 +25,7 @@ Unlike linear data structures(Array, Linked List, Queues, Stacks, etc) which hav
 
 2. Breadth First Search
 
- Reference 
+Reference 
 
-https://www.geeksforgeeks.org/binary-tree-data-structure/#construction
+https://www.geeksforgeeks.org/binary-tree-data-structure/#traversals
 
