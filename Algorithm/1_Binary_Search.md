@@ -73,6 +73,7 @@ int binarySearch(int arr[], int x)
     // not present 
     return -1; 
 }
+```
 
 Reference
 

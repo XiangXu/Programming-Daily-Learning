@@ -1,11 +1,11 @@
 # Backtracking
 
-Backtracking is an algorithmic-technique for **solving problems recursively by trying to build a solution incremently**, one pice at a time, removing those solutions that fail to stasify the constraints of the probelm at any point of time.
+Backtracking is an algorithmic-technique for **solving problems recursively by trying to build a solution incremently**, one piece at a time, removing those solutions that fail to stasify the constraints of the probelm at any point of time.
 
 There are three types of problems in backtracking
 
 1. Decision Problem - In this, we search for a feasible(可行的) solution.
-2. Optimization Problem - In this, we wearch for best solution.
+2. Optimization Problem - In this, we search for best solution.
 3. Enumeration Problem - In this, we find all feasible solutions.
 
 ## How to determine if a problem can be solved using Bcktracking?
