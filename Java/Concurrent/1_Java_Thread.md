@@ -472,7 +472,7 @@ public static int get()
 
 ### Thread States
 
-1. **New**: A thread remains in this state only momentarily, as it is being created. It allocates any necessary system resources and platforms initialization. At this point it becomes eligible to receive CPU time. The scheduler will then transition this thread to the runnable or blocked statel.
+1. **New**: A thread remains in this state only momentarily, as it is being created. It allocates any necessary system resources and platforms initialization. At this point it becomes eligible to receive CPU time. The scheduler will then transition this thread to the runnable or blocked state.
    
 2. **Runnable**: This means that a thread can be run when the time-slicing mechanism has CPU cycles available for the thread. Thus, the thread minght or might not be running at any moment, but there is nothing to prevent it from being run if the scheduler can arrange it. That is, it is not dead or blocked.
 
