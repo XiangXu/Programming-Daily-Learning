@@ -1,21 +1,4 @@
-# DATETIME and TIMESTAMP
-
-The **DATETIME** type is used for values contains both date and time parts. MYSQL reterives and displays **DATETIME** values in 'YYYY-MM-DD HH:MM:SS' format. The support range is 1000-01-01 00:00:00' to '9999-12-31 23:59:59'.
-
-The **TIMESTAMP** data type is used for values that contains both date and times parts. **TIMESTAMP** has a range of '1970-01-01 00:00:01' UTC to '2038-01-19 03:14:07' UTC.”
-
-*“MySQL converts TIMESTAMP values from the current time zone to UTC for storage, and back from UTC to the current time zone for retrieval. (This does not occur for other types such as DATETIME.)”.*
-
-When using the TIMESTAMP data type, the values are converted by the database to UTC (universal time zone) and are stored in that timezone. This means that when you fetch (SELECT) this data, a conversion will be done from UTC to the current time zone, and only then the data will be returned. This behavior doesn’t occur for DATETIME stored values.
-
-Well, if you are serving customers in different countries with different application instances, by using TIMESTAMP, you’ll be able to serve the same date and time data in different timezones, directly from the database.
-
-Please note that by default the applied timezone is the server’s timezone. You can set the timezone on a per connection basis if you wish to change it. For example, SET time_zone = '-8:00'; .
-
-To summarize, if you want to serve your date and time data the same way regardless of timezones, you can use the DATETIME type (which will also allow you to use all the date & type functions built in MySQL). Otherwise, you can use TIMESTAMP and serve the data on a per-timezone basis.
-
-
-## date和datetime、timestamp 的区别
+# date和datetime、timestamp 的区别
 date保存精度到天，格式为：YYYY-MM-DD，如2016-11-07
 datetime和timestamp精度保存到秒，格式为：YYYY-MM-DD HH:MM:SS,如：2016-11-07 10:58:27
 因此如果只需保存到天的字段（如生日）用date就可以了。
