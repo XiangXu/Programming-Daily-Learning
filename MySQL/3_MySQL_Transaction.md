@@ -4,7 +4,7 @@ MySQL transactions allow you to exeute a set of MySQL operations to ensure that 
 
 ## MySQL and ACID Model
 
-ACID(Atomicity, Consistency, Isolation, Durability(耐用)) is set of properties that guarantee that database transactiona are processed reliably. InnoDB storage engine supports ACID-compliant features. 
+ACID(Atomicity, Consistency, Isolation, Durability(耐用)) is set of properties that guarantee that database transactions are processed reliably. InnoDB storage engine supports ACID-compliant features. 
 
 ### Atomicity
 
