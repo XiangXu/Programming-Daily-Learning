@@ -39,117 +39,24 @@ But Two threads **can’t write data on same segments at the same time**. One ha
 
 ![example3](https://miro.medium.com/max/2000/0*EIGQ5ZqOcj-pIgKZ.png)
 
-## Deep Dive of Understanding how the put and gets will carried on Concurrent HashMap
+### JDK1.8
 
-### Constructor for the concurrent HashMap
+JDK1.8 的 ConcurrentHashMap 不在是 Segment 数组 + HashEntry 数组 + 链表，而是 Node 数组 + 链表 / 红黑树。不过，Node 只能用于链表的情况，红黑树的情况需要使用 TreeNode。当冲突链表达到一定长度时，链表会转换成红黑树。
 
-```java
-ConcurrentHashMap map = new ConcurrentHashMap(int initialCapacity, float loadFactor, int concurrencyLevel)
-```
+ConcurrentHashMap 取消了 Segment 分段锁，采用 CAS 和 synchronized 来保证并发安全。数据结构跟 HashMap1.8 的结构类似，数组+链表/红黑二叉树。Java 8 在链表长度超过一定阈值（8）时将链表（寻址时间复杂度为 O(N)）转换为红黑树（寻址时间复杂度为 O(log(N))。
 
-![example4](https://miro.medium.com/max/1400/0*b6rdgX9mZRGRA77I.png)
+synchronized 只锁定当前链表或红黑二叉树的首节点，这样只要 hash 不冲突，就不会产生并发，效率又提升 N 倍。
 
-```
-segment array size = 2 to the power x = concurrency level
-Bucket array size inside the segment = 2 ^ x ≥ (initialCapacity / concurrencyLevel)
-```
+## HashMap 的长度为什么是 2 的幂次方
 
-If we give concurrency level or initialCapacity = 10 and it will consider concurrency level or initialCapacity as 16 ( next 2 to the power x is 16)
+为了能让 HashMap 存取高效，尽量较少碰撞，也就是要尽量把数据分配均匀。我们上面也讲到了过了，Hash 值的范围值-2147483648 到 2147483647，前后加起来大概 40 亿的映射空间，只要哈希函数映射得比较均匀松散，一般应用是很难出现碰撞的。但问题是一个 40 亿长度的数组，内存是放不下的。所以这个散列值是不能直接拿来用的。用之前还要先做对数组的长度取模运算，得到的余数才能用来要存放的位置也就是对应的数组下标。这个数组下标的计算方法是“ (n - 1) & hash”。（n 代表数组长度）。这也就解释了 HashMap 的长度为什么是 2 的幂次方。
 
-**The number of threads processed at a time in concurrentHashMap is equal to the concurrency level**.
+这个算法应该如何设计呢？
 
-### PUT and GET Operations in Concurrent HashMap
-
-![example5](https://miro.medium.com/max/1400/1*aqbOZowMWf_-svS-K4iP2A.png)
-
-1. Calculation of Hashcode (hash index for the bucket(array) which is present inside the segment) for the key
-
-```java
-int hash = hash(key.hashCode());
-
-//CALCULATION OF HASHINDEX 
-private static int hash(int h) {
-	// Spread bits to regularize both segment and index locations,
-	// using variant of single-word Wang/Jenkins hash.
-	h += (h <<  15) ^ 0xffffcd7d;
-	h ^= (h >>> 10);
-	h += (h <<   3);
-	h ^= (h >>>  6);
-	h += (h <<   2) + (h << 14);
-	return h ^ (h >>> 16);
-}
-```
-
-2. Preparation of HashEntry<K,V>
-
-```java
-static final class HashEntry<K,V> {
-    final int hash;
-    final K key;
-    volatile V value;
-    volatile HashEntry<K,V> next;
-}
-```
-
-3. Calculation of Segment Shift and Segment Mask with the Help of Concurrency Level provided in constructor.
-
-```java
-private static void SegmentDetails(int concurrencyLevel) {
-	int sshift = 0;
-	int segmentMask = 0;
-	int segmentShift = 0;
-
-	int ssize = 1;
-	while (ssize < concurrencyLevel) {
-		++sshift;
-		ssize <<= 1;
-	}
-	segmentShift = 32 - sshift;
-	segmentMask = ssize - 1;
-	System.out.println("Segment array size :" + ssize);
-	System.out.println("segmentShift : " + segmentShift);
-	System.out.println("segmentMask : " + segmentMask);
-}
-```
-
-4. Calculate the Segment Level (Index of the Segment Array)
-
-```java
-//Segment Implementation
-static final class Segment<K,V> extends ReentrantLock implements Serializable {
-
-	//The number of elements in this segment's region.
-	transient volatile int count;
-	//The per-segment table. 
-	transient volatile HashEntry<K,V>[] table;
-}
-//Segment index calculation 
-final Segment<K,V> segmentFor(int hash) {
-	return segments[(hash >>> segmentShift) & segmentMask];
-}
-```
-
-5. Put and Get
-   * Put: Based on segment index, HashEntry<K,V>(node) is placed in particular segment then Based on the hashindex, HashEntry<K,V>(node) is placed in array inside the segment which is similarly like how nodes are placed inside the bucket in HashMap.
-   * Get: Based on segment index, we figure out particular segment then Based on the hashindex, we will get values from the array inside the segment which is similarly like how we will get values from the bucket in HashMap.
-
-### LoadFactor and Rehashing 
-
-1. ConcurrentHashMap has loadFactor which decides **when exactly to increase the capacity of ConcurrentHashMap** by calculating threshold(initialCapacity*loadFactor) and accordingly rehashing the map.
-   
-2. Basically, Rehashing is the process of re-calculating the hashcode of already stored entries (Key-Value pairs), to move them to another bigger size map when Load factor threshold of bucket inside the segment is reached. Also It is not only done to distribute items across the new length map, but also when there are too many key collisions which increases entries in one bucket so that get and put operation time complexity remains O(1).
-
-**In ConcurrentHashMap, Every segment is separately rehashed so there is no collision between Thread 1 writing to Segment index 1 and Thread 2 writing to Segment index 4**.
-
-### Methods of Concurrent HashMap is not an Atomic Nature
-
-```java
-votingMachine.put("TDP",0L);
-votingMachine.put("TDP",new AtomicLong());
-```
-
-Use AtomicLong Variable instead of Long to escape from shared-Mutability. we can also used other approaches like synchronized block to solve above problem
+我们首先可能会想到采用%取余的操作来实现。但是，重点来了：“取余(%)操作中如果除数是 2 的幂次则等价于与其除数减一的与(&)操作（也就是说 hash%length==hash&(length-1)的前提是 length 是 2 的 n 次方；）。” 并且 采用二进制位操作 &，相对于%能够提高运算效率，这就解释了 HashMap 的长度为什么是 2 的幂次方
 
 Reference
 
 https://medium.com/art-of-coding/hash-table-vs-concurrent-hashmap-and-its-internal-working-b28fc2725bdb
+
+https://github.com/Snailclimb/JavaGuide/blob/master/docs/java/collection/Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98.md#1410-concurrenthashmap-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F%E5%BA%95%E5%B1%82%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0
