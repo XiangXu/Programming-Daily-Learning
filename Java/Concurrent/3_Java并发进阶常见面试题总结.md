@@ -126,13 +126,6 @@ synchronized关键字和volatile关键字是两个互补的存在, 而不是对�
 
 * volatile关键字主要用于解决变量在多个线程之间的可见性，而 synchronized关键字解决的是多个线程之间访问资源的同步性.
 
-
-
-
-
-
-
-
 Reference
 
 https://snailclimb.gitee.io/javaguide/#/docs/java/Multithread/JavaConcurrencyAdvancedCommonInterviewQuestions
